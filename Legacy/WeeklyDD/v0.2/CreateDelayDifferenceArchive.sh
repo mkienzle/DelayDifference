@@ -1,0 +1,1 @@
+tar -cvf KienzleDelayDifferenceC++Model.tar FitWeeklyDelayDifference.cxx FixPar.h LogLikelihoodFunction.cxx LogLikelihoodFunction.h ReadMe.1st vonMisesRecDist.cxx WeeklyDelayDifference.cxx WeeklyDelayDifference.h Data/SimData4.txt

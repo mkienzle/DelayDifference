@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# USAGE in ~/mystuff/Work/DEEDI/Moreton Bay Prawn Trawl fishery/Analysis/Scripts/DelayDifferenceModel/1989-2010/Weekly/model7
+#          WhatIsMSY.sh Results/ParameterEstimates.txt Data/WeeklyPercentageOfSpawners.txt Results/BevAndHoltCoef.txt Data/AverageEffortPattern.txt Data/Availability.txt
+#  CREATED  19 November 2013
+#  MODIFIED 19 November 2013
+
+# Get only the parameter estimates from the result file
+cut -f2 -d"," $1 > /tmp/ParEstimates.txt
+
+WhatIsMSY /tmp/ParEstimates.txt $2 $3 $4 $5 $6

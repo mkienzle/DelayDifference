@@ -1,0 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+ 
+int main(int argc, char *argv[]) {
+    double n = strtod(argv[1],NULL);
+ 
+    printf("The number: %f\n",n);
+ 
+    return 0;
+}

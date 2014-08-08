@@ -1,0 +1,17 @@
+# Brody growth coefficients
+0.87103
+# Estimated weight at recruitment
+0.019041
+# Parameter defining weight one timestep before recruitment
+0.012281
+# Natural mortality (per month)
+0.195
+# Catchability scaling factor
+1e-4
+# Biomass scaling factor
+1e5
+# Recruitment scaling factor
+1e7
+# Number of months in a year
+12
+

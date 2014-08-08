@@ -1,0 +1,37 @@
+// @(#)root/minuit2:$Id: GaussFcn.cxx 20880 2007-11-19 11:23:41Z rdm $
+// Authors: M. Winkler, F. James, L. Moneta, A. Zsenei   2003-2005  
+
+/**********************************************************************
+ *                                                                    *
+ * Copyright (c) 2005 LCG ROOT Math team,  CERN/PH-SFT                *
+ *                                                                    *
+ **********************************************************************/
+
+#include "LogLikLinearReg.h"
+#include <stdio.h>
+#include <math.h>
+
+#include <cassert>
+
+namespace ROOT {
+
+   namespace Minuit2 {
+
+
+double LogLikLinearReg::operator()(const std::vector<double>& par) const {
+  
+  assert(par.size() == 2);
+
+  double ss = 0., chi2 = 0., sigma = 0.;
+
+  for(unsigned int n = 0; n < fYvalues.size(); n++) { ss += ((par[0] + par[1] * fXvalues[n]) - fYvalues[n]) * ((par[0] + par[1] * fXvalues[n]) - fYvalues[n]); }
+
+  sigma = ss / fYvalues.size();
+  chi2 = fYvalues.size() * log(sqrt(2 * 3.1416) * sigma) + 1/(2 * sigma*sigma) * ss;
+  return chi2;
+}
+
+
+  }  // namespace Minuit2
+
+}  // namespace ROOT

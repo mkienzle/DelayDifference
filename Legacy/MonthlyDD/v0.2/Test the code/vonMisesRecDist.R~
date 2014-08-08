@@ -1,0 +1,57 @@
+vonMisesRecDist <- function(a,b){
+
+
+library(circular)
+# Interval of time you are interested in
+intervals <- rep(NA, 12)
+boundaries <- seq(-pi, pi, length =13)
+
+
+  ////// Calculate von Mises probability associated with each interval
+
+
+      ///// Calculate probability in each interval using the cumulative distribution function
+
+      if(boundaries[i+1] <= (a - pi) ){
+	intervals[i] = von_mises_cdf(boundaries[i+1] + 2 * pi, a, b) - von_mises_cdf(boundaries[i] + 2 * pi, a, b);
+      }
+
+      if(boundaries[i] <= (a - pi) && (a - pi) < boundaries[i+1]){
+	intervals[i] = von_mises_cdf(a + pi, a, b) - von_mises_cdf(boundaries[i] + 2 * pi, a, b)
+	  + von_mises_cdf(boundaries[i+1], a, b) - von_mises_cdf(a - pi, a, b);
+}
+
+      if(boundaries[i] > (a - pi) && (a + pi) > boundaries[i+1]){
+	intervals[i] = von_mises_cdf(boundaries[i+1], a, b) - von_mises_cdf(boundaries[i], a, b);
+}
+
+      if(boundaries[i] < (a + pi) && (a + pi) <= boundaries[i+1]){
+	intervals[i] = von_mises_cdf(a + pi, a, b) - von_mises_cdf(boundaries[i], a, b)
+	  + von_mises_cdf( boundaries[i+1] - 2 * pi, a,b ) - von_mises_cdf( a - pi, a, b);
+}
+
+      if(boundaries[i] >= (a + pi)){
+	intervals[i] = von_mises_cdf(boundaries[i+1] - 2 * pi, a, b) - von_mises_cdf(boundaries[i] - 2 * pi, a, b);
+}
+
+      // sometimes small negative probability appears 
+      if(intervals[i] < 0.0)
+	// if they are small, replace them by zero
+	if(abs(intervals[i]) < 1e-5){ intervals[i] = 0.0;}
+      // otherwise throw an error
+	else{
+	  throw;}
+
+     total += intervals[i];
+      	}
+ 
+    //cout << "von mises density equal " << total << "\n";
+    // throw exception if cumulative density 
+    if(abs(total - 1) > 1e-2){
+      cout << "von mises density equal " << total << "\n";
+      throw;
+    }
+    //// cout << "And the sum of prob is " << total << "\n";
+    return intervals;
+
+}

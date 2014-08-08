@@ -1,0 +1,16 @@
+# Brody growth coefficients
+0.96328
+# Estimated weight at 22 weeks (in kg)
+0.0195
+# Parameter defining weight week 21 (in kg)
+0.017756
+# Natural mortality (per week)
+0.045
+# Catchability scaling factor
+1e-4
+# Biomass scaling factor
+1e5
+# Recruitment scaling factor
+1e7
+# Number of intervals in a year
+52

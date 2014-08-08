@@ -1,0 +1,4 @@
+# CREATED  18 May 2014
+# MODIFIED 18 May 2014
+
+An interesting observation from testing this monthly delay difference model is that fitting the model with wk_1 ( the parameter for age 1 month before the age at recruitment ) equal to zero provide better fits to the data than using the value estimated with the Schnute method (see EstimatingRho.r). This is equivalent to omit ( - rho * survival[counter-1] * wk_1 *  Rec[counter-1] ) in the recursive calculation of biomass in ~/mystuff/Programs/C++/DelayDifference/MonthlyDD/v0.2/MonthlyDelayDifference.cxx

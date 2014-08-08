@@ -1,0 +1,17 @@
+// CREATED  29 April 2014
+// MODIFIED 29 April 2014
+
+// AUTHOR Marco.Kienzle@gmail.com
+
+// PURPOSE some useful functions
+
+// Read variable from files
+
+void fill_from_file(vector<Point>& points, string& name)
+{
+    ifstream ist(name.c_str());    // open file for reading
+    if (!ist) error("can't open input file ",name);
+    // ... use ist ...
+    // the file is implicitly closed when we leave the function
+}
+

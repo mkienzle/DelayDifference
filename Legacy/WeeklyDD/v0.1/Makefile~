@@ -1,0 +1,9 @@
+# CREATED  23 April 2014
+# MODIFIED 23 April 2014
+
+# AUTHOR Marco.Kienzle@gmail.com
+
+# PURPOSE build the weekly delay difference model
+
+FitWeeklyDelayDifference: vonMisesRecDist.o FitWeeklyDelayDifference.o LogLikelihoodFunction.o WeeklyDelayDifference.o
+			g++ -std=c++0x -g -o FitWeeklyDelayDifference -I/usr/include /usr/lib/prob.o vonMisesRecDist.cxx FitWeeklyDelayDifference.cxx LogLikelihoodFunction.cxx WeeklyDelayDifference.cxx `root-config --glibs --cflags` -lMinuit2

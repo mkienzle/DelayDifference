@@ -1,0 +1,51 @@
+# Minimum negative log likelihood
+
+Minuit did successfully converge.
+# of function calls: 821
+minimum function Value: 1230.956662975
+minimum edm: 8.84517887776e-06
+minimum internal state vector: LAVector parameters:
+     -26.73184517721
+     -1.287002217587
+      2.246969197688
+     -1.237506776973
+     -2.510260601183
+                   0
+     -1.065484231526
+      -1.44580878136
+     -1.417014242334
+     -1.392788622477
+     -1.371459021813
+
+minimum internal covariance matrix: LASymMatrix parameters:
+  0.00017340156              0   0.0018890514  -0.0019413535  -0.0044868882              0              0              0              0              0              0
+              0              2              0              0              0              0              0              0              0              0              0
+   0.0018890514              0    0.027836975    0.023975911   -0.067907157              0              0              0              0              0              0
+  -0.0019413535              0    0.023975911      0.3667347   -0.070696486              0              0              0              0              0              0
+  -0.0044868882              0   -0.067907157   -0.070696486     0.16614832              0              0              0              0              0              0
+              0              0              0              0              0              2              0              0              0              0              0
+              0              0              0              0              0              0              2              0              0              0              0
+              0              0              0              0              0              0              0              2              0              0              0
+              0              0              0              0              0              0              0              0              2              0              0
+              0              0              0              0              0              0              0              0              0              2              0
+              0              0              0              0              0              0              0              0              0              0              2
+
+
+# ext. ||   Name    ||   type  ||     Value     ||  Error +/- 
+
+   0   ||Targeted q || limited ||    0.02003169845181 ||0.0131771232561
+   1   ||Nontargeted q || limited ||                   2 ||22.06548931833
+   2   ||     sigma || limited ||      88.99867452232 ||3.683005571883
+   3   ||  Biomass1 || limited ||      27.51436442916 ||67.9246942576
+   4   ||  Biomass2 || limited ||      204.8897150336 ||114.7299750173
+   5   ||   vm_mean || limited ||                   0 ||2.643559064081
+   6   ||  vm_sigma || limited ||                   5 ||16.29338596935
+   7   ||Recruit year 1 || limited ||                 0.4 ||22.80330411741
+   8   ||Recruit year 2 || limited ||                 0.6 ||22.71136457858
+   9   ||Recruit year 3 || limited ||                 0.8 ||22.61942503976
+  10   ||Recruit year 4 || limited ||                   1 ||22.52748550093
+
+
+
+
+

@@ -1,0 +1,4 @@
+# CREATED   4 June 2012
+# MODIFIED 21 August 2013
+ 
+This Test1 directory contains a weekly delay difference model which was tested using the same input as those used to generate the simulated set of data. The script DoesTheCodeEstimateTheCorrectBiomass.sh checks that this delay difference implementation is able to calculate identical biomasses to those simulated provided the correct input. No parameter are estimated by the scripts in this directory. Those checks were used to correct the implementation until the calculated biomass were nearly identical to the simulated one.

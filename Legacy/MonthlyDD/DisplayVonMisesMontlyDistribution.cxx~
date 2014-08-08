@@ -1,0 +1,13 @@
+// CREATED   4 February 2014
+// MODIFIED  4 February 2014
+
+// PURPOSE given 2 parameters (mu and kappa), display the density distribution in each month
+
+# include <math.h>
+# include <iostream>
+
+std::vector<double> vonMisesRecDist(double a, double b);
+
+double mu=0.0, kappa=0.0;
+
+std::cout << "Program to display the von mises distribution\n";

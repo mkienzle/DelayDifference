@@ -1,0 +1,6 @@
+# CREATED   4 June 2012
+# MODIFIED 20 August 2013
+ 
+This testing of the weekly Delay Difference model fit on simulated data was developped to assess the ability of this method to estimate parameter used in the simulation.
+
+The simulation does not assume any stock/recruitment relationship

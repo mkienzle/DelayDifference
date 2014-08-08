@@ -1,0 +1,27 @@
+# CREATED  23 April 2014
+# MODIFIED 23 April 2014
+
+# AUTHOR Marco.Kienzle@gmail.com
+
+# PURPOSE build the weekly delay difference model
+
+CFLAGS = -std=c++0x -O2 -I/usr/include $(shell root-config --glibs --cflags) -lMinuit2
+
+FitWeeklyDelayDifference_v0.2: vonMisesRecDist.o FitWeeklyDelayDifference.o LogLikelihoodFunction.o WeeklyDelayDifference.o
+			g++ -o FitWeeklyDelayDifference /usr/lib/prob.o vonMisesRecDist.o FitWeeklyDelayDifference.o LogLikelihoodFunction.cxx WeeklyDelayDifference.o $(CFLAGS)
+
+vonMisesRecDist.o: vonMisesRecDist.cxx FixPar.h
+	g++ $(CFLAGS) -c vonMisesRecDist.cxx /usr/lib/prob.o 
+
+LogLikelihoodFunction.o: LogLikelihoodFunction.cxx LogLikelihoodFunction.h WeeklyDelayDifference.h FixPar.h 
+	g++ $(CFLAGS) -c LogLikelihoodFunction.cxx
+
+WeeklyDelayDifference.o: WeeklyDelayDifference.cxx FixPar.h
+	g++ $(CFLAGS) -c WeeklyDelayDifference.cxx
+
+FitWeeklyDelayDifference.o: FitWeeklyDelayDifference.cxx WeeklyDelayDifference.h LogLikelihoodFunction.h FixPar.h
+	g++ $(CFLAGS) -c FitWeeklyDelayDifference.cxx
+
+clean:
+	rm -f *.o FitWeeklyDelayDifference
+

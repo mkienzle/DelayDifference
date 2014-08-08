@@ -1,0 +1,13 @@
+Targeted catchability, 2.25
+von Mises mean, -1.92
+von Mises sigma, 14.29
+Recruitment, 4.04
+Recruitment, 3.69
+Recruitment, 5.29
+Recruitment, 3.17
+Recruitment, 8.99
+Recruitment, 8.5
+Recruitment, 2.71
+Recruitment, 9.52
+Recruitment, 2.28
+Recruitment, 4.73
