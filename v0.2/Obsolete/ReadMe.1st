@@ -1,6 +1,0 @@
-CREATED  10 Sep 2013
-MODIFIED 23 Apr 2014
-
-This version 0.2 (FitWeeklyDelayDifference_v0.2) removed the use of the header file FixPar.h to define constant values used throughout the files. Instead it reads these values from the file FixPar.txt located in the directory where the program is executed.
- 
-
