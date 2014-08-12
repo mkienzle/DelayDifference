@@ -1,2 +1,0 @@
-sim.biomass <- read.csv("Data/SimulatedBiomass.csv")
-sim.biomass <- sim.biomass[seq(nrow(sim.biomass) - 4 * 12 + 1, nrow(sim.biomass),]
