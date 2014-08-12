@@ -7,15 +7,23 @@
 
 # PURPOSE 
 
-The purpose of this project is to implement in C++ the Schnute-Deriso delay difference model. This program is used to produce reliable estimates of specific parameters of the dynamic of a fish population. Reliability is assessed with simulated datasets to verify and demonstrate that this program is producing correct values of parameters it estimates.
+The purpose of this project is to implement the Schnute-Deriso delay difference model in C++. This program is used 
+to produce reliable estimates of specific parameters of the dynamic of a fish population. Reliability is 
+assessed with simulated datasets to verify and demonstrate that this program is producing correct values 
+of parameters it estimates.
 
 # BACKGROUND
 
-This directory contains a C++ implementation of the delay difference (Schnute 1984, Deriso 1980). The program relies on 2 input files to perform its computation: (1) fisheries data (catch and efforts at specific timesteps) and (2) parameters fixed in the model (model timesteps, weight at recruitment, Brody growth coefficients, ...). 
+This directory contains a C++ implementation of the delay difference (Schnute 1984, Deriso 1980). The program relies on 
+2 input files to perform its computation: (1) fisheries data (catch and efforts at specific timesteps) and 
+(2) parameters fixed in the model (model timesteps, weight at recruitment, Brody growth coefficients, ...). 
 
-Several options were implemented, each with specific capability: for example, estimate natural mortality or not. The files common to all versions are in the same directory as this file while those specific to each version are in their respective directory v0.2, v0.3, etc... 
+Several options were implemented, each with specific capability: for example, estimate natural mortality or not. 
+The files common to all versions are in the same directory as this file while those specific to each version are in 
+their respective directory Option2, Option3, etc... 
 
-The model runs at any timesteps (daily, weekly, monthly but not annually as it assumes a distribution of recruitment within years) desired by the user.
+The model runs at any timesteps (daily, weekly, monthly but not annually as it assumes a distribution of 
+recruitment within years) desired by the user.
 
 # DESCRIPTION OF THE MODEL
 
@@ -23,7 +31,7 @@ Description of the model are available from Kienzle et al. (2014), Schnute (1984
 
 # PROGRAM options
 
-Option1: [Legacy code] estimates 7 parameters (Targeted catchability, Nontargeted catchability, sigma, Biomass1, Biomass2, vm_mean, vm_sigma) + 1 recruitment for each year of data. Natural mortality, rho, timesteps (weekly, monthly or else), etc.. were fixed in FixedParameters.h file passed as a second argument. This model was used in Kienzle (2014) using weekly timesteps.
+[Legacy code] estimates 7 parameters (Targeted catchability, Nontargeted catchability, sigma, Biomass1, Biomass2, vm_mean, vm_sigma) + 1 recruitment for each year of data. Natural mortality, rho, timesteps (weekly, monthly or else), etc.. were fixed in FixedParameters.h file passed as a second argument. This model was used in Kienzle (2014) using weekly timesteps.
 
 Option2: reads fixed values for natural mortality, rho, etc... from a file (FixedParameters.txt) provided by a user. This file needs to follow a very specific format where the value of each parameters are indicated by specific keywords.
 
@@ -33,7 +41,7 @@ Option3: this version estimates natural mortality. This is something a bit contr
 1. [DONE on 2014-05-29] the algorithm get stuck around -M_PI or M_PI, it would be good to change the code to get a cyclic function rather than a "no through way"
 
 # USAGE
-DelayDifference_v0.2 Data/SimData4.txt FixedParameters.txt
+DelayDifference_vOption2 Data/SimData4.txt FixedParameters.txt
 
 
 
@@ -46,7 +54,8 @@ Schnute (1985) A general theory for analysis of catch and effort data. Can. J. F
 # Libraries dependencies
 ############################################################################################################################################################
 
-This software relies on MINUIT, available through ROOT (root.cern.ch, see below how to install).
+This software relies on MINUIT, available through ROOT (root.cern.ch, see below how to install) or
+independently at www.cern.ch/minuit
 
 This software relies on the C++ library PROB by John Burkardt (http://people.sc.fsu.edu/~jburkardt/c_src/c_src.html)
 
@@ -63,23 +72,4 @@ install library PROB that contains probability distribution function (see ~/myst
 To link against a static minuit library,
 install minuit from http://seal.web.cern.ch/seal/snapshot/work-packages/mathlibs/minuit/
 
-
-
-
-
-
-
-##### OBSOLETE
-
-after recoding the monthly delay difference model for Moreton Bay into a weekly delay difference and finding that the jacobian approach to estimate uncertainty on the parameter was (a) contorted and (b) yielded very small value on the simulated data, I decided to try to fit this model with MINUIT writing the code in C++
-
-INSTALL MINUIT (instruction taken from http://seal.web.cern.ch/seal/snapshot/work-packages/mathlibs/minuit/)
---------------
-
-wget http://www.cern.ch/mathlibs/sw/5_28_00/Minuit2/Minuit2-5.28.00.tar.gz
-tar xzf Minuit2-5.28.00.tar.gz
-cd Minuit2-5.28.00
-
-./configure
-make
 
