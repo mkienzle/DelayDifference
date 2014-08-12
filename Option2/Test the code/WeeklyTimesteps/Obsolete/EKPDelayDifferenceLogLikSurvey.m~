@@ -1,0 +1,115 @@
+% CREATED  18 April 2012
+% MODIFIED  4 June  2012
+
+% PURPOSE Fit a delay difference model to Eastern King Prawn data using the
+% likelihood of observing CPUE assuming they are log-normal distributed
+
+% STATUS works on one set of simulated data but I have to give the model a
+% lot of tips to converge
+
+% USAGE: [x,fval,exitflag] = fminsearch(@(par) EKPLogLikDelayDifference(par, cpue), [1,1,1,1,1],  optimset('MaxFunEvals',1e5, 'MaxIter', 1e5, 'Display','iter'))
+% USAGE: plot(cpue, '--rs'); hold; plot(x(1) * 1e-5 * Biomass)
+
+% OBSOLETE USAGE: [x,fval,exitflag] = fminsearch(@(par) EKPLogLikDelayDifference(par, cpue), [1,1,1,ones(1,10)],  optimset('MaxFunEvals',1e5, 'MaxIter', 1e5, 'Display','iter'))
+
+function negLL = EKPLogLikDelayDifference(par, FixedPar, cpue)
+global Biomass timesteps M ctch effort Recruitment RecSurvey Survival
+
+%%%%% Allocate individual parameters in vector par to clearer names
+catchability_q = par(1) * 1e-5;
+
+% Compute the biomass dynamic
+DelayDifference([par, FixedPar]);
+
+%% Calculate the negative log-likelihood (negLL) of the cpue
+
+%% Calculate predicted cpue
+
+% Using the Biomass at time t
+pred_cpue = catchability_q * [Biomass(3:timesteps)];
+
+% Using the ratio from catch (estimates from the average biomass in each interval) to effort
+%pred_cpue = catchability_q * effort(3:end) ./ (catchability_q * effort(3:end) + M) .* Biomass(3:end) .* (1 - exp(- catchability_q * effort(3:end) - M)) ./ effort(3:end);
+% pred_cpue = catchability_q * [Biomass(3:timesteps)] .* ((1-Survival(3:end))./-log(Survival(3:end)));
+%pred_cpue = catchability_q * ( [Biomass(3:timesteps)] * [exp(- M/2)] - [ctch(3:timesteps) / 2]);
+
+% Corresponding CPUEs
+cpue_butfirst2 = cpue(3:timesteps);
+
+% Lots of CPUEs are missing
+idx = ~isnan(cpue_butfirst2);
+
+%  disp(' ##### ')
+%  disp(cpue_butfirst2(idx))
+%  disp(' ##### ')
+
+%--Lognormal likelihood for cpues--
+%note: normal likelihood on log transformed data 
+%_Commercial cpue_
+lnpred   = log(pred_cpue); %log of predicted
+%diff=(cpue>0).*(max(log(cpue),0)-lnpred);    %observed minus predicted adjusted for month with no data (using c)
+
+% disp(' ##### ')
+% disp(pred_cpue(idx))
+% disp(' ##### ')
+
+diff = log(cpue_butfirst2(idx)) - lnpred(idx);
+%disp(diff)
+%diff = log(cpue(3:timesteps)) - lnpred;
+ss       = sum(diff.^2);
+
+
+diff1 = cpue_butfirst2(idx) - pred_cpue(idx);
+ss1 = sum(diff1.^2);
+
+%nss      = sum(cpue(3:timesteps)>0); 
+nss = timesteps - 2;
+sigma    = sqrt(ss./nss); % Estimate of the variance
+sigma1 = sqrt(ss1./nss);
+
+% Using sum of squares as an objective
+%cpueLL = ss;
+
+% Assuming log of prediction to be distributed as a Gaussian with mean
+% equal to the log of CPUE (similar to assuming lognormal distribution of
+% CPUE)
+ cpueLL = nss * log(sqrt(2 * pi) * sigma) + 1/(2 * sigma.^2) * ss;
+% Same as above, expressed using Haddon (2001) simplification, Eq. 3.19 
+% cpueLL = (nss./2).*(log(2*pi)+(2.*log(sigma))+1);% negative loglikelihood for a logNormal distribution 
+
+% Assuming estimated biomasses linearly related to CPUE with a Gaussian
+% error
+% cpueLL = nss * log(sqrt(2 * pi) * sigma1) + 1/(2 * sigma1.^2) * ss1;
+
+% Can you estimate parameters by predicting catches ?
+%cpueLL = -sum( (ctch - (catchability_q*ones(120,1).* ctch./ cpue)./ (catchability_q*ones(120,1).* ctch./cpue + M*ones(120,1)) .* Biomass .* (1 - exp(-catchability_q*ones(120,1).*ctch./cpue-M*ones(120,1)))).^2);
+
+% Here you assume that your CPUE prediction are distributed according to a
+% log-normal with mean equal to the log of observed CPUE and sigma
+% standard deviation
+% cpueLL = nss * log( sqrt(2 * pi) * par(12)) + sum(lnpred) + 1/(2 * par(12).^2) * ss;
+
+%res = diff./sigma(ones(length(diff),1),:);    %standardised residual
+
+% Assume the Delay-Difference recruitment estimates are Normally distributed around the recruitment survey
+% ss2 = sum((Recruitment(2:12:120) - RecSurvey).^2);
+% nss2 = length(RecSurvey);
+% sigma2 = sqrt(ss2/nss2);
+
+% surveyLL =   nss2 * log(sqrt(2 * pi) * sigma2) + 1/(2 * sigma2.^2) * ss2;
+
+% disp(' ##### ')
+% disp(cpueLL)
+% disp(surveyLL)
+
+
+%if (cpueLL > 0) negLL = cpueLL; end
+%if (surveyLL > 0) negLL = surveyLL; end
+%if (cpueLL < 0) & (surveyLL < 0) negLL = cpueLL + surveyLL; end
+%negLL = cpueLL + surveyLL; 
+%negLL = surveyLL;
+%negLL = cpueLL;
+%negLL = surveyLL;
+negLL = cpueLL;
+end
+

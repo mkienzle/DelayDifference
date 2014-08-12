@@ -1,0 +1,11 @@
+Targeted q,5.22553,0.457437
+Nontargeted q,2,22.0655
+sigma,43.2625,4.37677
+Biomass1,0.401265,0.269494
+Biomass2,0.880679,0.170336
+vm_mean,-3.14159,0.000336096
+vm_sigma,8.80688,0.573616
+Recruit year 1,9.41657,1.34324
+Recruit year 2,2.48335,0.696931
+Recruit year 3,7.14774,0.83768
+Recruit year 4,5.04253,0.981192

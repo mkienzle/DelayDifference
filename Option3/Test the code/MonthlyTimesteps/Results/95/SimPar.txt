@@ -1,0 +1,14 @@
+Targeted catchability, 7.19
+Natural mortality, 0.0538
+von Mises mean, -2.33
+von Mises sigma, 64.55
+Recruitment, 5.6
+Recruitment, 9.26
+Recruitment, 6.25
+Recruitment, 8.99
+Recruitment, 8.95
+Recruitment, 1.15
+Recruitment, 4.88
+Recruitment, 7.39
+Recruitment, 8.51
+Recruitment, 7.52
