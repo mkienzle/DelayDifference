@@ -1,13 +1,19 @@
 # CREATED  30 August 2013
-# MODIFIED 29 May    2014
+# MODIFIED 11 August 2014
 
 # AUTHOR Marco.Kienzle@gmail.com
+
+"Programming is where ideas and theories meet reality", Bjarne Stroustrup
+
+# PURPOSE 
+
+The purpose of this project is to implement in C++ the Schnute-Deriso delay difference model. This program is used to produce reliable estimates of specific parameters of the dynamic of a fish population. Reliability is assessed with simulated datasets to verify and demonstrate that this program is producing correct values of parameters it estimates.
 
 # BACKGROUND
 
 This directory contains a C++ implementation of the delay difference (Schnute 1984, Deriso 1980). The program relies on 2 input files to perform its computation: (1) fisheries data (catch and efforts at specific timesteps) and (2) parameters fixed in the model (model timesteps, weight at recruitment, Brody growth coefficients, ...). 
 
-Several versions of the model were implemented, each with specific capability: for example, estimate natural mortality or not. The files common to all versions are in the same directory as this file while those specific to each version are in their respective directory v0.2, v0.3, etc... 
+Several options were implemented, each with specific capability: for example, estimate natural mortality or not. The files common to all versions are in the same directory as this file while those specific to each version are in their respective directory v0.2, v0.3, etc... 
 
 The model runs at any timesteps (daily, weekly, monthly but not annually as it assumes a distribution of recruitment within years) desired by the user.
 
@@ -15,13 +21,13 @@ The model runs at any timesteps (daily, weekly, monthly but not annually as it a
 
 Description of the model are available from Kienzle et al. (2014), Schnute (1984) and Deriso (1980).
 
-# VERSIONS OF THE PROGRAM
+# PROGRAM options
 
-v0.1: [Legacy code] estimates 7 parameters (Targeted catchability, Nontargeted catchability, sigma, Biomass1, Biomass2, vm_mean, vm_sigma) + 1 recruitment for each year of data. Natural mortality, rho, timesteps (weekly, monthly or else), etc.. were fixed in FixedParameters.h file passed as a second argument. This model was used in Kienzle (2014) using weekly timesteps.
+Option1: [Legacy code] estimates 7 parameters (Targeted catchability, Nontargeted catchability, sigma, Biomass1, Biomass2, vm_mean, vm_sigma) + 1 recruitment for each year of data. Natural mortality, rho, timesteps (weekly, monthly or else), etc.. were fixed in FixedParameters.h file passed as a second argument. This model was used in Kienzle (2014) using weekly timesteps.
 
-v0.2: reads fixed values for natural mortality, rho, etc... from a file (FixedParameters.txt) provided by a user. This file needs to follow a very specific format where the value of each parameters are indicated by specific keywords.
+Option2: reads fixed values for natural mortality, rho, etc... from a file (FixedParameters.txt) provided by a user. This file needs to follow a very specific format where the value of each parameters are indicated by specific keywords.
 
-v0.3: this version estimates natural mortality. This is something a bit controversial in fisheries research literature up to 2014 but testing shows that the algorithm converges consistently to the correct values; uncertainties are larger using monthly timesteps rather than weekly -- the larger number of data helps the model to characterise more precisely the parameters of the model.
+Option3: this version estimates natural mortality. This is something a bit controversial in fisheries research literature up to 2014 but testing shows that the algorithm converges consistently to the correct values; uncertainties are larger using monthly timesteps rather than weekly -- the larger number of data helps the model to characterise more precisely the parameters of the model.
 
 # TO DO LIST
 1. [DONE on 2014-05-29] the algorithm get stuck around -M_PI or M_PI, it would be good to change the code to get a cyclic function rather than a "no through way"
@@ -47,13 +53,15 @@ This software relies on the C++ library PROB by John Burkardt (http://people.sc.
 This software relies on BOOST libraries
 
 # Installing ROOT
-install ROOT (from root.cern.ch) unabling minuit2 using the following command
+install ROOT (from root.cern.ch) enabling minuit2 using the following command
 ./configure --prefix=/usr/local --enable-minuit2
 make 
 make install
 
 install library PROB that contains probability distribution function (see ~/mystuff/Software/Prob_library)
 
+To link against a static minuit library,
+install minuit from http://seal.web.cern.ch/seal/snapshot/work-packages/mathlibs/minuit/
 
 
 
