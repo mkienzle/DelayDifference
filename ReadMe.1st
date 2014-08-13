@@ -37,6 +37,10 @@ Option2: reads fixed values for natural mortality, rho, etc... from a file (Fixe
 
 Option3: this version estimates natural mortality. This is something a bit controversial in fisheries research literature up to 2014 but testing shows that the algorithm converges consistently to the correct values; uncertainties are larger using monthly timesteps rather than weekly -- the larger number of data helps the model to characterise more precisely the parameters of the model.
 
+# COMPILE
+
+To compile the program with the option you desire to use, go into the option directory you are interested in and use make to compile it.
+
 # TO DO LIST
 1. [DONE on 2014-05-29] the algorithm get stuck around -M_PI or M_PI, it would be good to change the code to get a cyclic function rather than a "no through way"
 
