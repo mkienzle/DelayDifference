@@ -1,8 +1,0 @@
-Obs <- sqrt(rowSums(noisy.Catch))
-Mod <- sqrt(rowSums(Catch))
-
-x <- Obs - Mod
-
-lik.fct <- function(par) sum(dnorm(x, mean = par[1], sd = par[2], log = TRUE))
-
-optim(c(0,100), lik.fct)

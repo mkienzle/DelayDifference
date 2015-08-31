@@ -1,9 +1,0 @@
-CREATED  10 Sep 2013
-MODIFIED 25 Apr 2014
-
-v0.1: estimates 7 parameters (Targeted catchability, Nontargeted catchability, sigma, Biomass1, Biomass2, vm_mean, vm_sigma) + 1 recruitment per year. Natural mortality, rho, etc.. were fixed in FixPar.h. This model was used for "Environmental and fishing effects on the dynamics of brown tiger prawn (Penaeus esculentus) in Moreton Bay (Australia)", Fisheries Research, Volume 155, July 2014, Pages 138-148
-
-v0.2: reads fixed values for natural mortality, rho, etc... from a file in the local directory where the program is executed allowing to change these parameters after the delay difference model has been compiled.
-
-
-

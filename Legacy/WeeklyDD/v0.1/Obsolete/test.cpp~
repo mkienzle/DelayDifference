@@ -1,6 +1,0 @@
-#include <iostream>
-
-void test(double &par){
-
-  std::cout << par << "\n";
-}

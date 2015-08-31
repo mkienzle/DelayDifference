@@ -1,0 +1,15 @@
+Natural mortality,0.0613194,0.00202966
+Targeted q,1.67415,0.158622
+Nontargeted q,2,22.0655
+sigma,2.95226,0.150635
+Biomass1,1.56657,0.172697
+Biomass2,1.47178,0.155455
+vm_sigma,69.0289,8.72842
+Recruit year 1,1.77232,0.182575
+Recruit year 2,2.0245,0.206277
+Recruit year 3,0.706602,0.0731504
+Recruit year 4,3.87735,0.404743
+Mean Rec dist 1,0.408525,0.0119724
+Mean Rec dist 2,0.391119,0.0108501
+Mean Rec dist 3,0.820811,0.0239496
+Mean Rec dist 4,0.537482,0.010376

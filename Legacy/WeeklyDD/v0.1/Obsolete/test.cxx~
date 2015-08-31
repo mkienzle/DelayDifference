@@ -1,6 +1,0 @@
-// a test to see how to access to minuit parameter vector
-
-void access_parameter(MnUserParameters *par){
-
-  std::cout << "first par is " << par[0] << "\n";
-}
