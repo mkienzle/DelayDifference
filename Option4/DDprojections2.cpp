@@ -1,9 +1,9 @@
 // CREATED  19 November 2013
 // MODIFIED 29 July 2014
 
-// version 0.3
+// version 0.1 option 4
 
-// USAGE (see DD_v0.3Projections.sh) DD_v0.3Projections FixedWeeklyParameters.txt /tmp/ParEstimates.txt Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/AverageAvailability.txt 100
+// USAGE (see DD_Option4Projections.sh) DD_Option4Projections FixedWeeklyParameters.txt /tmp/ParEstimates.txt Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/AverageAvailability.txt 100
 
 // COMPILE make DD_v0.3Projections
 

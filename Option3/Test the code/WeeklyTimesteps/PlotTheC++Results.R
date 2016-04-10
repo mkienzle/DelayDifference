@@ -1,33 +1,35 @@
 # CREATED  14 November 2013
-# MODIFIED 29 May 2014
+# MODIFIED 10 June 2015
 
 # PURPOSE display the results of the simulation to test the delay difference model version 0.3 (written in C++) using data aggregated on weekly timesteps
 
 
-nb.sim <- 100
+nb.sim <- 1000
+
+args <- commandArgs(trailingOnly = TRUE)
 
 # cases where MINUIT converged to boundaries or stopped prematuraly
-failed.minimization <- c(1,5,9,10,14,25,28,29,30,35,37,47,69,99)
+failed.minimization <- unique(read.table(paste("Results/", args[1],"/FailedFit.txt", sep=""))$V1)
 
-sim.results <- data.frame(matrix(ncol = 18, nrow = nb.sim))
+sim.results <- data.frame(matrix(ncol = 20, nrow = nb.sim))
 
 dimnames(sim.results)[[2]] <- list("Sim.targeted.q", "Est.targeted.q", "sd.Est.targeted.q", 
 			      "Sim.vm.mean", "Est.vm.mean", "sd.Est.vm.mean", 
 			      "Sim.vm.sigma", "Est.vm.sigma", "sd.Est.vm.sigma",
                               "Sim.B1", "Est.B1", "sd.Est.B1",
 			      "Sim.B2", "Est.B2", "sd.Est.B2",
-			      "Sim.NatMort", "Est.NatMort", "sd.Est.NatMort")
+			      "Sim.NatMort", "Est.NatMort", "sd.Est.NatMort","Sigma","SigmaError")
 
 for(i in setdiff(1:nb.sim, failed.minimization)){
-sim.data <- read.table(paste("Results/", i, "/SimData4.txt", sep = ""))
+sim.data <- read.table(paste("Results/", args[1], "/", i, "/SimData4.txt", sep = ""))
 
-sim.par <- read.table(paste("Results/", i, "/SimPar.txt", sep = ""))
+sim.par <- read.table(paste("Results/", args[1], "/", i, "/SimPar.txt", sep = ""))
 sim.results$Sim.targeted.q[i] <- sim.par$V1[1]
 sim.results$Sim.NatMort[i] <- sim.par$V1[2]
 sim.results$Sim.vm.mean[i] <- sim.par$V1[3]
 sim.results$Sim.vm.sigma[i] <- sim.par$V1[4]
 
-par.est <- read.csv(paste("Results/", i, "/ParameterEstimates.txt", sep = ""), header = FALSE)
+par.est <- read.csv(paste("Results/", args[1], "/", i, "/ParameterEstimates.txt", sep = ""), header = FALSE)
 
 sim.results$Est.NatMort[i] <- par.est$V2[1]
 sim.results$sd.Est.NatMort[i] <- par.est$V3[1]
@@ -43,9 +45,13 @@ sim.results$sd.Est.vm.mean[i] <- par.est$V3[7]
 sim.results$Est.vm.sigma[i] <- par.est$V2[8]
 sim.results$sd.Est.vm.sigma[i] <- par.est$V3[8]
 
+sim.results$Sigma[i] <- par.est$V2[4]
+sim.results$SigmaError[i] <- par.est$V3[4]
+
+
 ##### Biomass
 print(i)
-sim.biomass <- read.csv(paste("Results/", i, "/SimulatedBiomass.csv", sep = ""), header = TRUE)
+sim.biomass <- read.csv(paste("Results/", args[1], "/", i, "/SimulatedBiomass.csv", sep = ""), header = TRUE)
 sim.results$Sim.B1[i] <- sim.biomass[seq(nrow(sim.biomass) - 4*52 + 1, nrow(sim.biomass) - 4*52 + 2),"x"][1]
 sim.results$Est.B1[i] <- par.est$V2[5] * 1e5
 sim.results$sd.Est.B1[i] <- par.est$V3[5] * 1e5
@@ -56,32 +62,49 @@ sim.results$sd.Est.B2[i] <- par.est$V3[6] * 1e5
 
 }
 
+#### Output summary
+sim.summary <- cbind("WhiteNoiseLevel"=args[1], sim.results)
+write.csv(sim.summary, file = paste("Results/Tables/", args[1], "SimulationsSummary.csv", sep = ""))
+
 # Plot
-par(mfrow = c(3,2))
- 
-with(sim.results, plot(Sim.NatMort, Est.NatMort, main = "Natural mortality", xlab = "Simulated", ylab = "Estimated (+- 2 SD)", pch = 19, type = "n", las = 1, cex = 0.2))
+#par(mfrow = c(3,2))
+
+postscript(file = paste("Results/Graphics/", args[1], "-EstimateVsSimulate-NaturalMortality.ps", sep =""))
+with(sim.results, plot(Sim.NatMort, Est.NatMort, xlab = "Simulated natural mortality", ylab = "Estimated natural mortality (+- 2 SD)", main = paste("white noise level ", args[1], " %"), pch = 19, type = "n", las = 1, cex = 0.2))
 for(i in 1:nb.sim) with(sim.results, text( Sim.NatMort, Est.NatMort, pch = i))
-abline(0,1, lty = 3)
+
 with(sim.results, segments(Sim.NatMort, Est.NatMort - 2 * sd.Est.NatMort, Sim.NatMort, Est.NatMort + 2 * sd.Est.NatMort))
+abline(0,1, lty = 1, col ="red", lwd = 1.5)
+dev.off()
 
-with(sim.results, plot(Sim.targeted.q, Est.targeted.q, main = "Targeted catchability", xlab = "Simulated", ylab = "Estimated (+- 2 SD)", pch = 19, type = "n", las = 1, cex = 0.2))
+postscript(file = paste("Results/Graphics/", args[1], "-EstimateVsSimulate-TargetedCatchability.ps", sep = ""))
+with(sim.results, plot(Sim.targeted.q, Est.targeted.q, main = paste("white noise level ", args[1], " %"), xlab = "Simulated targeted catchability", ylab = "Estimated targeted catchability (+- 2 SD)", pch = 19, type = "n", las = 1, cex = 0.2))
 for(i in 1:nb.sim) with(sim.results, text( Sim.targeted.q, Est.targeted.q, pch = i))
-abline(0,1, lty = 3)
+
 with(sim.results, segments(Sim.targeted.q, Est.targeted.q - 2 * sd.Est.targeted.q, Sim.targeted.q, Est.targeted.q + 2 * sd.Est.targeted.q))
+abline(0,1, lty = 1, col ="red", lwd = 1.5)
+dev.off()
 
-with(sim.results, plot(Sim.vm.mean, Est.vm.mean, main = "Von mises distribution's mean", xlab = "Simulated", ylab = "Estimated (+- 2 SD)", pch = 19, type = "p", las = 1, cex = 0.2))
-abline(0,1, lty = 3)
+postscript(file = paste("Results/Graphics/", args[1], "-EstimateVsSimulate-VonMisesMean.ps", sep = ""))
+with(sim.results, plot(Sim.vm.mean, Est.vm.mean, main = paste("white noise level ", args[1], " %"), xlab = "Simulated von Mises mean", ylab = "Estimated von Mises mean (+- 2 SD)", pch = 19, type = "p", las = 1, cex = 0.2))
+
 with(sim.results, segments(Sim.vm.mean, Est.vm.mean - 2 * sd.Est.vm.mean, Sim.vm.mean, Est.vm.mean + 2 * sd.Est.vm.mean))
+abline(0,1, lty = 1, col ="red", lwd = 1.5)
+dev.off()
 
-with(sim.results, plot(Sim.vm.sigma, Est.vm.sigma, main = "Von mises distribution's sigma", xlab = "Simulated", ylab = "Estimated (+- 2 SD)", pch = 19, type = "p", las = 1, xlim = c(0,60), ylim = c(0,60), cex = 0.2))
-abline(0,1, lty = 3)
+postscript(file = paste("Results/Graphics/", args[1], "-EstimateVsSimulate-VonMisesStdDeviation.ps", sep=""))
+with(sim.results, plot(Sim.vm.sigma, Est.vm.sigma, main = paste("white noise level ", args[1], " %"), xlab = "Simulated von Mises SD ", ylab = "Estimated von Mises SD (+- 2 SD)", pch = 19, type = "p", las = 1, xlim = c(0,60), ylim = c(0,60), cex = 0.2))
+
 with(sim.results, segments(Sim.vm.sigma, Est.vm.sigma - 2 * sd.Est.vm.sigma, Sim.vm.sigma, Est.vm.sigma + 2 * sd.Est.vm.sigma))
+abline(0,1, lty = 1, col ="red", lwd = 1.5)
+dev.off()
 
-with(sim.results, plot(1e-6 * Sim.B1, 1e-6 * Est.B1, main = "Biomass(1) and biomass(2)", xlab = "Simulated (x 1000 tonnes)", ylab = "Estimated (+- 2 SD) (x 1000 tonnes)", pch = 19, type = "p", las = 1, cex = 0.2))
-abline(0,1, lty = 3)
+postscript(file = paste("Results/Graphics/", args[1], "-EstimateVsSimulate-Biomasses.ps", sep = ""))
+with(sim.results, plot(1e-6 * Sim.B1, 1e-6 * Est.B1, main = paste("white noise level ", args[1], " %"), xlab = "Simulated initial biomasses (x 1000 tonnes)", ylab = "Estimated initial biomasses (+- 2 SD) (x 1000 tonnes)", pch = 19, type = "p", las = 1, cex = 0.2))
 with(sim.results, segments(1e-6 * Sim.B1, 1e-6 * (Est.B1 - 2 * sd.Est.B1), 1e-6 * Sim.B1, 1e-6 * (Est.B1 + 2 * sd.Est.B1)))
 
 with(sim.results, points(1e-6 * Sim.B2, 1e-6 * Est.B2, pch = 19, cex = 0.2))
 with(sim.results, segments(1e-6 * Sim.B2, 1e-6 * (Est.B2 - 2 * sd.Est.B2), 1e-6 * Sim.B2, 1e-6 * (Est.B2 + 2 * sd.Est.B2)))
+abline(0,1, lty = 1, col ="red", lwd = 1.5)
+dev.off()
 
-dev.print(device=postscript)

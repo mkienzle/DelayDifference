@@ -1,5 +1,5 @@
 // CREATED   10 Sep 2013
-// MODIFIED  29 Apr 2014
+// MODIFIED   6 Apr 2016
 
 // PURPOSE calculate biomass using a delay difference model with weekly timesteps
 
@@ -24,7 +24,9 @@ std::vector<double> vonMisesRecDist(double a, double b);
 //           7. a vector giving the proportion of effort in each week (it sum = 1)
 //           8. a vector giving the fraction ( 1 <= x <= 0) of stock available to fishing in each week
 
-int Projections(const long unsigned int max_timestep, const double &TotTargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<double> &par, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability){
+#include "../UsefulFunctions.h"
+
+int Projections(const long unsigned int max_timestep, const double &TotTargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<Parameter> &ParameterVector, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability){
 
   // Global variables
   extern int NIPY;
@@ -49,16 +51,16 @@ int Projections(const long unsigned int max_timestep, const double &TotTargetedE
   std::vector< double > TargetedEffort(max_timestep, 0.0);
 
   // Remember that the optimizer work on parameters of the same order of magnitude
-  double Targeted_catchability = par[0] * CatchabilityScalingFactor;
-  double Nontargeted_catchability = par[1] * CatchabilityScalingFactor;
+  double Targeted_catchability = GetParameterValueAccordingToShortName(ParameterVector, "Targeted q") * CatchabilityScalingFactor;
+  double Nontargeted_catchability = GetParameterValueAccordingToShortName(ParameterVector, "Nontargeted q") * CatchabilityScalingFactor;
 
   // Initialise the vector of biomass
-  Biomass[0] = par[3] *  BiomassScalingFactor;
-  Biomass[1] = par[4] *  BiomassScalingFactor;
+  Biomass[0] = GetParameterValueAccordingToShortName(ParameterVector, "Biomass1") *  BiomassScalingFactor;
+  Biomass[1] = GetParameterValueAccordingToShortName(ParameterVector, "Biomass2") *  BiomassScalingFactor;
 
   // von mises parameters
-  double vm_mean = par[5]; // make sure it varies between -M_PI and +M_PI
-  double vm_sigma = par[6]; // should be positive
+  double vm_mean = GetParameterValueAccordingToShortName(ParameterVector, "vm_mean"); // make sure it varies between -M_PI and +M_PI
+  double vm_sigma = GetParameterValueAccordingToShortName(ParameterVector, "vm_sigma"); // should be positive
 
   // Construct the vector of Effort which is constant from year to year
   for(unsigned int i=0; i < max_timestep; i += 1){
@@ -75,9 +77,11 @@ int Projections(const long unsigned int max_timestep, const double &TotTargetedE
   std::vector<double> RecDist(NIPY, 0.0);
   RecDist = vonMisesRecDist(vm_mean, vm_sigma);
   
-  // Create the vector of recruitment for the first year
+  // Create the vector of recruitment for the first year using an initial recruitment
+  double MagnitudeOfInitialRecruitment=1.5;
     for(unsigned int counter = 0; counter < NIPY; counter++){
-      Rec[counter] = par[7 + counter / NIPY] * RecruitmentScalingFactor * RecDist[counter % NIPY];
+      //Rec[counter] = par[7 + counter / NIPY] * RecruitmentScalingFactor * RecDist[counter % NIPY];
+      Rec[counter] = MagnitudeOfInitialRecruitment * RecruitmentScalingFactor * RecDist[counter % NIPY];
     }
 
   // Recursive calculation of biomass

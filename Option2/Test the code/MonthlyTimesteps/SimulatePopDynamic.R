@@ -34,8 +34,8 @@ recruitment.by.week <- rep(NA, length(intra.year.timesteps));
 # Parameters
 #A <- 0
 #B <- 10
-A <- runif(1, min = -3.1, max = 3.1)
-B <- runif(1, min = 1, max = 70)
+A <- runif(1, min = 0.2, max = 1.2)
+B <- runif(1, min = 1, max = 50)
 
 write.table(paste("von Mises mean,", round(A,2)), append = TRUE, file = "Results/SimPar.txt", eol="\n", col.names = FALSE, row.names = FALSE, quote = FALSE)
 write.table(paste("von Mises sigma,", round(B,2)), append = TRUE, file = "Results/SimPar.txt", eol="\n", col.names = FALSE, row.names = FALSE, quote = FALSE)

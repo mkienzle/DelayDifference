@@ -5,8 +5,9 @@
 
 # PURPOSE build the weekly delay difference model
 
+CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2
 #CFLAGS = -std=c++0x -O2 -I/usr/include $(shell root-config --glibs --cflags) -lMinuit2
-CFLAGS = -std=c++0x -O2 -I/usr/include -L/usr/local/lib/root -I/usr/local/include/root -lMinuit2
+#CFLAGS = -std=c++0x -O2 -I/usr/include -L/usr/local/lib/root -I/usr/local/include/root -lMinuit2
 
 ### Attempt to build a static binary (doesn't work!)
 #CFLAGS = -std=c++0x -O2 -I/usr/include -L/usr/local/lib -L/usr/local/lib/root -I/usr/local/include/root -lRoot -lMinuit2 -static
@@ -16,7 +17,7 @@ CFLAGS = -std=c++0x -O2 -I/usr/include -L/usr/local/lib/root -I/usr/local/includ
 ### 1. A program to fit the delay difference model to data and estimate parameters
 ##############################################################################################################################################################
 
-FitDelayDifference_Option3: FitDelayDifference_Option3.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o
+DelayDifference_Option3: FitDelayDifference_Option3.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o
 			g++ -o DelayDifference_Option3 /usr/lib/prob.o FitDelayDifference_Option3.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o $(CFLAGS)
 
 UsefulFunctions.o: ../lib_facilities.h ../UsefulFunctions.h ../UsefulFunctions.cpp
@@ -51,7 +52,7 @@ Projections2.o: Projections2.cpp
 ### make all
 ##############################################################################################################################################################
 
-all: FitDelayDifference_Option3 DD_Option3Projections
+all: DelayDifference_Option3 DD_Option3Projections
 
 ##############################################################################################################################################################
 ### make clean
@@ -60,11 +61,12 @@ all: FitDelayDifference_Option3 DD_Option3Projections
 clean:
 	rm -f *.o DelayDifference_Option3 DD_Option3Projections
 
-# ##############################################################################################################################################################
-# ### make test
-# ##############################################################################################################################################################
+############################################################################################################################################
+### make test
+###########################################################################################################################################
+testDelayDifference:
+	./DelayDifference_Option3 Data/SimData4.txt InputParameterDescription.csv
+	#diff Results/FitOutcome.txt Results/FitOutcome-2016Apr6.txt
+	diff Results/ParameterEstimates.txt Results/ParameterEstimates-2016Apr6.txt
 
-# test:
-# 	./FitDelayDifference_v0.2 Data/SimData4.txt > /tmp/output
-# 	tail --lines=+3 /tmp/output > /tmp/file1; tail --lines=+3 Results/v0.1.output > /tmp/file2
-# 	diff /tmp/file1 /tmp/file2 # header differ by the version number
+

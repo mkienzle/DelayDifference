@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # CREATED   14 Nov 2013
-# MODIFIED  26 May 2014
+# MODIFIED   5 Apr 2016
 
 # PURPOSE assess the capacity of the delay difference model Option2 [using MINUIT and coded in C++] to estimate parameters of a simulated population which data are available on weekly timestepd 
 
@@ -16,7 +16,7 @@ R --slave --vanilla < SimulatePopDynamic.R
 
 # Fit the delay difference model to simulated data
 echo "##### I am working on iteration $i #####"
-DelayDifference_Option2 Data/SimData4.txt FixedWeeklyParameters.txt
+DelayDifference_Option2 Data/SimData4.txt InputParameterDescription.csv
 cat Results/SimPar.txt
 
 # Store the results

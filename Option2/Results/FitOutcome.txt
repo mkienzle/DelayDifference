@@ -1,7 +1,7 @@
 # Minimum negative log likelihood
 
 Minuit did successfully converge.
-# of function calls: 448
+# of function calls: 473
 minimum function Value: 244.0075270704
 minimum edm: 1.849889599728e-06
 minimum internal state vector: LAVector parameters:

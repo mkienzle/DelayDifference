@@ -57,7 +57,7 @@ namespace ROOT {
        // Calculate the sum of square of differnce between *** square root *** of estimated and observed catch
        for(unsigned int n = 0; n < fCatchValues.size(); n++) 
 	 {
-	   ss+=pow( sqrt(EstimatedCatch[n]) - sqrt(fCatchValues[n]), 2);
+	   	   ss+=pow( sqrt(EstimatedCatch[n]) - sqrt(fCatchValues[n]), 2);
 	 }
 
        //// objective function: negative log-likelihood of a Gaussian distributed variable

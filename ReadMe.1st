@@ -1,5 +1,5 @@
-# CREATED  30 August 2013
-# MODIFIED 17 August 2014
+# CREATED  30 Aug 2013
+# MODIFIED  5 Apr 2016
 
 # AUTHOR Marco.Kienzle@gmail.com
 
@@ -10,13 +10,13 @@
 The purpose of this project is to implement the Schnute-Deriso delay difference model in C++. This program is used 
 to produce reliable estimates of specific parameters of the dynamic of a fish population. Reliability is 
 assessed with simulated datasets to verify and demonstrate that this program is producing correct values 
-of parameters it estimates.
+for parameters it estimates (see subdirectories "Test the code").
 
 # BACKGROUND
 
 This directory contains a C++ implementation of the delay difference (Schnute 1984, Deriso 1980). The program relies on 
 2 input files to perform its computation: (1) fisheries data (catch and efforts at specific timesteps) and 
-(2) parameters fixed in the model (model timesteps, weight at recruitment, Brody growth coefficients, ...). 
+(2) parameters fixed (model timesteps, weight at recruitment, Brody growth coefficients, ...) or to be estimated by fitting this model to data. 
 
 Several options were implemented, each with specific capability: for example, estimate natural mortality or not. 
 The files common to all versions are in the same directory as this file while those specific to each version are in 
@@ -33,27 +33,38 @@ Description of the model are available from Kienzle et al. (2014), Schnute (1984
 
 [Legacy code] estimates 7 parameters (Targeted catchability, Nontargeted catchability, sigma, Biomass1, Biomass2, vm_mean, vm_sigma) + 1 recruitment for each year of data. Natural mortality, rho, timesteps (weekly, monthly or else), etc.. were fixed in FixedParameters.h file passed as a second argument. This model was used in Kienzle (2014) using weekly timesteps.
 
-Option2: reads fixed values for natural mortality, rho, etc... from a file (FixedParameters.txt) provided by a user. This file needs to follow a very specific format where the value of each parameters are indicated by specific keywords.
+Option2: reads fixed values for natural mortality, rho, etc... from a file (InputParameterDescription.csv) provided by a user. And the characteristics of parameters to be estimated, such as starting value and upper/lower limit of for example targeted catchability, from that same file. This file contains Comma Separated Values (csv) for each parameter of the model. It needs to contains very specific Symbols and Short Names for the program to attribute the values to the correct variables using these keywords.
 
 Option3: this version estimates natural mortality. This is something a bit controversial in fisheries research literature up to 2014 but testing shows that the algorithm converges consistently to the correct values; uncertainties are larger using monthly timesteps rather than weekly -- the larger number of data helps the model to characterise more precisely the parameters of the model.
+
+Option 4: this version estimates specific recruitment-timing specific for each year.
 
 # COMPILE
 To compile the program with the option you desire to use, go into the option directory you are interested in and use make to compile it.
 
 # USAGE
-DelayDifference_Option2 Data/SimData4.txt FixedParameters.txt
+DelayDifference_Option2 Data/SimData4.txt InputParameterDescription.csv
 
 # TO DO LIST
 1. [DONE on 2014-05-29] the algorithm get stuck around -M_PI or M_PI, it would be good to change the code to get a cyclic function rather than a "no through way"
+2. [ADDED on 1 April 2016] modify the program to use as input a single csv file containing a list of starting values for parameters to be estimated and the fixed parameters used in the model
+3. [ADDED on 5 April 2016] output all parameters, fixed and estimate, of a delay difference model into a csv file called Results/DelayDifferenceModelParameters.csv
+4. [ADDED on 5 April 2016] automatic test in Makefile with: make testDelayDifference 
+
+## USEFUL COMMANDS
+
+# display a file nicely formatted
+column -t -s $',' InputParameterDescription.csv
+cut -f2-3,5-6 -d, Results/DelayDifferenceModelParameters.csv | column -t -s "$,"
 
 # REFERENCES
 Deriso (1980) Harvesting strategies and parameter estimation for an age-structured model. Can. J. Fish. Aquat. Sci. 37, 268-282
 Kienzle (2014) "Environmental and fishing effects on the dynamics of brown tiger prawn (Penaeus esculentus) in Moreton Bay (Australia)", Fisheries Research, Volume 155, July 2014, Pages 138-148
 Schnute (1985) A general theory for analysis of catch and effort data. Can. J. Fish. Aquat. Sci. 42, 414-429
 
-############################################################################################################################################################
+############################################################################################################################################
 # Libraries dependencies
-############################################################################################################################################################
+############################################################################################################################################
 
 This software relies on MINUIT, available through ROOT (root.cern.ch, see below how to install) or
 independently at www.cern.ch/minuit

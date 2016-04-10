@@ -1,5 +1,5 @@
 # CREATED  23 April 2014
-# MODIFIED  3 September 2014
+# MODIFIED  3 December 2015
 
 # AUTHOR Marco.Kienzle@gmail.com
 
@@ -36,14 +36,14 @@ FitDelayDifference_Option4.o: FitDelayDifference_Option4.cpp DelayDifference.h L
 ### 2. A program to simulate a fishery with the delay difference model based on parameters estimated for this model 
 ##############################################################################################################################################################
 
-DD_Option4Projections: /usr/lib/prob.o DDprojections2.o Projections2.o UsefulFunctions.o
-			g++ -std=c++0x -g -o DD_Option4Projections -I/usr/include /usr/lib/prob.o DDprojections2.o Projections2.o UsefulFunctions.o
+DD_Option4Projections: /usr/lib/prob.o DDprojections2.o Projections3.o UsefulFunctions.o
+			g++ -std=c++0x -g -o DD_Option4Projections -I/usr/include /usr/lib/prob.o DDprojections2.o Projections3.o UsefulFunctions.o
 
 DDprojections2.o: DDprojections2.cpp
 			g++ $(CFLAGS) -c DDprojections2.cpp
 
-Projections2.o: Projections2.cpp
-			g++ $(CFLAGS) -c Projections2.cpp
+Projections3.o: Projections3.cpp
+			g++ $(CFLAGS) -c Projections3.cpp
 
 ##############################################################################################################################################################
 ### make all

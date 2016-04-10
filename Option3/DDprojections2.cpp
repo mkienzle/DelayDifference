@@ -1,11 +1,11 @@
 // CREATED  19 November 2013
-// MODIFIED 29 July 2014
+// MODIFIED  3 December 2015
 
-// version 0.3
+// version 0.1
 
-// USAGE (see DD_v0.3Projections.sh) DD_v0.3Projections FixedWeeklyParameters.txt /tmp/ParEstimates.txt Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/AverageAvailability.txt 100
+// USAGE (see DD_Option3Projections.sh) DD_Option3Projections.sh FixedWeeklyParameters.txt /tmp/ParEstimates.txt Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/AverageAvailability.txt 100
 
-// COMPILE make DD_v0.3Projections
+// COMPILE make DD_Option3Projections
 
 // PURPOSE project biomass long into the future using a delay difference model according to
 //         1. a set of fixed parameters also used in the delay difference model
@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
-//#include "FixPar.h"
+
 #include <cstdlib>
 #include <cassert>
 

@@ -8,7 +8,8 @@ nb.sim <- 100
 
 # cases where MINUIT converged to boundaries or stopped prematuraly
 #failed.minimization <- c(5, 20, 48, 54, 60, 67, 70, 76)
-failed.minimization <- c(4, 34, 51, 53, 68, 73, 74, 76, 77, 80, 96, 98)
+#failed.minimization <- c(4, 34, 51, 53, 68, 73, 74, 76, 77, 80, 96, 98)
+failed.minimization <- c(21,30,33,55,62,67,81,90,92)
 
 sim.results <- data.frame(matrix(ncol = 15, nrow = nb.sim))
 
