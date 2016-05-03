@@ -1,0 +1,14 @@
+# Brody growth coefficients
+0.95786
+# Estimated weight at recruitment at 22 weeks (in kg)
+0.041965
+# Parameter defining weight one timestep before recruitment (at week 21, in kg)
+0.039095
+# Catchability scaling factor
+1e-4
+# Biomass scaling factor
+1e5
+# Recruitment scaling factor
+1e7
+# Number of intervals in a year
+52

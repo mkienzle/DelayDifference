@@ -1,0 +1,6 @@
+Name	Symbol	Type	Value	LowerLimit	UpperLimit	Unit
+Brody growth coefficient	rho		Fixed	0.96328	NA	NA	dimensionless
+Estimated weight at recruitment	wk		Fixed	0.0195	NA	NA	kilograms
+Targeted catchability		q1		Estimated	5e-5	5e-6	5e-4	per unit effort
+NonTargeted catchability	q2		Estimated	5e-5	5e-6	5e-4	per unit effort
+Natural mortality		M		Fixed		0.045	NA	NA	per week

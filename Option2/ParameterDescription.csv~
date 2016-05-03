@@ -1,0 +1,9 @@
+LongName	ShortName	Symbol	Type	Value	LowerLimit	UpperLimit	Unit
+Brody growth coefficient	NA	rho	Fixed	0.96328	0.96328	0.96328	dimensionless
+Estimated weight at recruitment	NA	wk	Fixed	0.0195	0.0195	0.0195	kilograms
+Targeted catchability		Targeted q	q1	Estimated	5e-5	5e-6	5e-4	per unit effort per week
+NonTargeted catchability	Nontargeted q	q2	Estimated	5e-5	5e-6	5e-4	per unit effort per week
+Natural mortality		NA	M	Fixed	0.045	0.045	0.045	per week
+Standard error of observation	sigma	sigma	Estimated	10	0	100 unit of catch
+Biomass at 1st time step	Biomass1	B1	Estimated	1	0   1000    unit of catch
+Biomass at 2nd time step	Biomass2	B2	Estimated	1	0	1000	 unit of catch

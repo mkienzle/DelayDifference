@@ -1,5 +1,5 @@
 # CREATED  23 April 2014
-# MODIFIED  3 December 2015
+# MODIFIED  4 May   2016
 
 # AUTHOR Marco.Kienzle@gmail.com
 
@@ -63,6 +63,7 @@ clean:
 # ##############################################################################################################################################################
 
 # test:
-# 	./FitDelayDifference_v0.2 Data/SimData4.txt > /tmp/output
-# 	tail --lines=+3 /tmp/output > /tmp/file1; tail --lines=+3 Results/v0.1.output > /tmp/file2
-# 	diff /tmp/file1 /tmp/file2 # header differ by the version number
+testDelayDifference:
+	./DelayDifference_Option4 Data/SimData4.txt InputParameterDescription.csv
+	#diff Results/FitOutcome.txt Results/FitOutcome-2016Apr6.txt
+	diff Results/ParameterEstimates.txt Results/ParameterEstimates-24Apr2016.txt

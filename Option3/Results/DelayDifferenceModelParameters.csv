@@ -1,0 +1,20 @@
+LongName,ShortName,Symbol,Type,Value,Uncertainty,Unit
+Number of intervals in a year,NA,NIPY,Fixed,52,0,weeks
+Brody growth coefficient,NA,rho,Fixed,0.96328,0,dimensionless
+Weight at recruitment at 22 weeks,weight at recruitment,wk,Fixed,0.0195,0,kilograms
+Parameter defining weight one timestep before recruitment at week 21,Parameter defining weight one timestep before recruitment,wk_1,Fixed,0.017756,0,kilograms
+Catchability scaling factor,Catchability scaling factor,CatchabilityScalingFactor,Fixed,0.0001,0,dimensionless
+Targeted catchability,Targeted q,q1,Estimated,0.569366,0.0305953,per unit effort per week
+NonTargeted catchability,Nontargeted q,q2,Estimated,2,22.0655,per unit effort per week
+Natural mortality,Natural mortality,M,Estimated,0.044127,0.000431946,per week
+Standard error of observation,sigma,sigma,Estimated,1.66899,0.0825586,unit of catch
+Biomass scaling factor,Biomass scaling factor,BiomassScalingFactor,Fixed,100000,0,dimensionless
+Biomass at 1st time step,Biomass1,B1,Estimated,25.8373,1.40776,unit of catch
+Biomass at 2nd time step,Biomass2,B2,Estimated,24.7691,1.34242,unit of catch
+Recruitment scaling factor,Recruitment scaling factor,RecruitmentScalingFactor,Fixed,1e+07,0,dimensionless
+Magnitude of recruitment in year 1,Recruit year 1,NA,Estimated,34.7913,1.94122,count of fish
+Magnitude of recruitment in year 2,Recruit year 2,NA,Estimated,51.9805,2.88263,count of fish
+Magnitude of recruitment in year 3,Recruit year 3,NA,Estimated,69.6621,3.85627,count of fish
+Magnitude of recruitment in year 4,Recruit year 4,NA,Estimated,87.4036,4.80856,count of fish
+Mean of recruitment distribution through time according to a von Mises,vm_mean,vm_mean,Estimated,-0.00755865,0.00389563,dimensionless on a scale from -pi to pi
+Standard deviation of recruitment distribution through time according to a von Mises,vm_sigma,vm_sigma,Estimated,5.02014,0.0716985,dimensionless

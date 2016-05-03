@@ -1,0 +1,23 @@
+LongName,ShortName,Symbol,Type,Value,Uncertainty,Unit
+Number of intervals in a year,NA,NIPY,Fixed,52,0,weeks
+Brody growth coefficient,NA,rho,Fixed,0.96328,0,dimensionless
+Weight at recruitment at 22 weeks,weight at recruitment,wk,Fixed,0.0195,0,kilograms
+Parameter defining weight one timestep before recruitment at week 21,Parameter defining weight one timestep before recruitment,wk_1,Fixed,0.017756,0,kilograms
+Catchability scaling factor,Catchability scaling factor,CatchabilityScalingFactor,Fixed,0.0001,0,dimensionless
+Targeted catchability,Targeted q,q1,Estimated,0.59562,0.0164208,per unit effort per week
+NonTargeted catchability,Nontargeted q,q2,Estimated,2,22.0655,per unit effort per week
+Natural mortality,Natural mortality,M,Estimated,0.0438835,0.000261435,per week
+Standard error of observation,sigma,sigma,Estimated,1.63838,0.0839212,unit of catch
+Biomass scaling factor,Biomass scaling factor,BiomassScalingFactor,Fixed,100000,0,dimensionless
+Biomass at 1st time step,Biomass1,B1,Estimated,24.6478,0.848488,unit of catch
+Biomass at 2nd time step,Biomass2,B2,Estimated,23.6443,0.783768,unit of catch
+Recruitment scaling factor,Recruitment scaling factor,RecruitmentScalingFactor,Fixed,1e+07,0,dimensionless
+Magnitude of recruitment in year 1,Recruit year 1,NA,Estimated,33.2392,0.92108,count of fish
+Magnitude of recruitment in year 2,Recruit year 2,NA,Estimated,49.781,1.35745,count of fish
+Magnitude of recruitment in year 3,Recruit year 3,NA,Estimated,66.633,1.82555,count of fish
+Magnitude of recruitment in year 4,Recruit year 4,NA,Estimated,83.4039,2.28108,count of fish
+Timing of recruitment in year 1,Mean Rec dist 1,NA,Estimated,-0.00528932,0.00615391,dimensionless on a scale from -pi to pi
+Timing of recruitment in year 2,Mean Rec dist 2,NA,Estimated,-0.0115291,0.00455474,dimensionless on a scale from -pi to pi
+Timing of recruitment in year 3,Mean Rec dist 3,NA,Estimated,-0.00321768,0.0045014,dimensionless on a scale from -pi to pi
+Timing of recruitment in year 4,Mean Rec dist 4,NA,Estimated,-0.0135433,0.00418577,dimensionless on a scale from -pi to pi
+Standard deviation of recruitment distribution through time according to a von Mises,vm_sigma,vm_sigma,Estimated,5.02171,0.0788935,dimensionless

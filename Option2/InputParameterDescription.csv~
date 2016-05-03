@@ -1,0 +1,14 @@
+LongName,ShortName,Symbol,Type,Value,LowerLimit,UpperLimit,Unit
+Brody growth coefficient,NA,rho,Fixed,0.96328,0.96328,0.96328,dimensionless
+Estimated weight at recruitment, at 22 weeks (in kg),Estimated weight at recruitment,wk,Fixed,0.0195,0.0195,0.0195,kilograms
+Parameter defining weight one timestep before recruitment, at week 21 (in kg), Parameter defining weight one timestep before recruitment,wk_1,Fixed,0.017756,0.017756,0.017756,kilograms
+Targeted catchability,Targeted q,q1,Estimated,5e-5,5e-6,5e-4,per unit effort per week
+NonTargeted catchability,Nontargeted q,q2,Estimated,5e-5,5e-6,5e-4,per unit effort per week
+Natural mortality,NA,M,Fixed,0.045,0.045,0.045,per week
+Standard error of observation,sigma,sigma,Estimated,10,0,100,unit of catch
+Biomass at 1st time step,Biomass1,B1,Estimated,1,0,1000,unit of catch
+Biomass at 2nd time step,Biomass2,B2,Estimated,1,0,1000,unit of catch
+Catchability scaling factor,Fixed,1e-4,1e-4,1e-4,dimensionless
+Biomass scaling factor,NA,NA,BiomassScalingFactor,Fixed,1e5,1e5,1e5,dimensionless
+Recruitment scaling factor,NA,NA,RecruitmentScalingFactor,Fixed,1e7,1e7,1e7,dimensionless
+Number of intervals in a year,NA,NIPY,Fixed,52,52,52,weeks

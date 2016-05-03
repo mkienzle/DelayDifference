@@ -1,0 +1,9 @@
+
+error.range <- seq(10, 40, 10)
+
+for(i in 1:length(error.range)){
+
+ifelse(i == 1, tmp <- read.csv(paste("Results/Tables/WhiteNoiseLevel", error.range[i], "SimulationsSummary.csv", sep = "")),
+tmp <- rbind(tmp, read.csv(paste("Results/Tables/WhiteNoiseLevel", error.range[i], "SimulationsSummary.csv", sep = ""))))
+
+}
