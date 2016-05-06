@@ -30,8 +30,15 @@ int Projections(const long unsigned int max_timestep, const double &TotTargetedE
 
   // Global variables
   extern int NIPY;
-  extern double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
-  extern double rho, wk, wk_1, M;
+  //extern double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
+  //extern double rho, wk, wk_1, M;
+  // Read parameters
+  double rho = GetParameterValueAccordingToSymbol(ParameterVector, "rho");
+  double wk = GetParameterValueAccordingToSymbol(ParameterVector, "wk");
+  double wk_1 = GetParameterValueAccordingToSymbol(ParameterVector, "wk_1");
+  double CatchabilityScalingFactor = GetParameterValueAccordingToSymbol(ParameterVector, "CatchabilityScalingFactor");
+  double BiomassScalingFactor = GetParameterValueAccordingToSymbol(ParameterVector, "BiomassScalingFactor");
+  double RecruitmentScalingFactor = GetParameterValueAccordingToSymbol(ParameterVector, "RecruitmentScalingFactor");
 
   // Normal random generator to simulate recruitment deviations from the mean
   std::default_random_engine generator;
@@ -51,6 +58,7 @@ int Projections(const long unsigned int max_timestep, const double &TotTargetedE
   std::vector< double > TargetedEffort(max_timestep, 0.0);
 
   // Remember that the optimizer work on parameters of the same order of magnitude
+  double M = GetParameterValueAccordingToSymbol(ParameterVector, "M");
   double Targeted_catchability = GetParameterValueAccordingToShortName(ParameterVector, "Targeted q") * CatchabilityScalingFactor;
   double Nontargeted_catchability = GetParameterValueAccordingToShortName(ParameterVector, "Nontargeted q") * CatchabilityScalingFactor;
 

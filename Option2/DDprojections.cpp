@@ -20,6 +20,8 @@
 // REFERENCE Kienzle et al. Fisheries Research 155 (2014) p. 138-148
 //           Hilborn and Walters (1992) Quantitative Fisheries Stock Assessment
 
+// COMPILE make DD_Option2Projections
+
 // OBSOLETE COMPILE g++ -std=c++0x -g -o WeeklyDDprojections -I/usr/include /usr/lib/prob.o Projections.cxx vonMisesRecDist.cxx WeeklyDDprojections.cpp
 
 #include <fstream>
@@ -38,8 +40,8 @@
 using namespace std;
 
 // Global variables
-double rho, wk, wk_1, M;
-double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
+//double rho, wk, wk_1, M;
+//double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
 int NIPY;
 
 int Projections(const long unsigned int max_timestep, const double &TargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<Parameter> &ParameterVector, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability);
@@ -53,6 +55,7 @@ int main(int argc, char *argv[]){
 
   //string FixParfilename = "FixParameters.txt";
   std::string arg1(argv[1]);
+  std::vector<Parameter> ModelInputParameters = ReadOutputParameterDescription(arg1);
   //display_file(arg1);
 
   // Read file into a vector of class Parameter
@@ -62,13 +65,13 @@ int main(int argc, char *argv[]){
 
   // Assign fixed model's parameter set according to the information provided by the user in the csv file passed as 2nd argument
 
-  rho = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "rho");
-  wk = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "wk");
-  wk_1 = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "wk_1");
-  M = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "M");
-  CatchabilityScalingFactor = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "CatchabilityScalingFactor");
-  BiomassScalingFactor = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "BiomassScalingFactor");
-  RecruitmentScalingFactor = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "RecruitmentScalingFactor");
+  double rho = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "rho");
+  double wk = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "wk");
+  double wk_1 = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "wk_1");
+  double M = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "M");
+  double CatchabilityScalingFactor = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "CatchabilityScalingFactor");
+  double BiomassScalingFactor = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "BiomassScalingFactor");
+  double RecruitmentScalingFactor = GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "RecruitmentScalingFactor");
   NIPY = (int) GetParameterValueAccordingToSymbol(DelayDifferenceParameters, "NIPY");
 
   const int NbYear = 150;

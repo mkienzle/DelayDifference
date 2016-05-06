@@ -1,5 +1,5 @@
 // CREATED   10 Sept 2013
-// MODIFIED  28 Jul  2014
+// MODIFIED   6 May  2016
 
 // PURPOSE calculate biomass using a delay difference model with weekly timesteps
 
@@ -10,6 +10,8 @@
 #include <random>
 #include <fstream>
 #include <sstream>
+
+#include "../UsefulFunctions.h"
 
 std::vector<double> vonMisesRecDist(double a, double b);
 
@@ -24,12 +26,19 @@ std::vector<double> vonMisesRecDist(double a, double b);
 //           7. a vector giving the proportion of effort in each week (it sum = 1)
 //           8. a vector giving the fraction ( 1 <= x <= 0) of stock available to fishing in each week
 
-int Projections2(const long unsigned int max_timestep, const double &TotTargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<double> &par, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability){
+int Projections2(const long unsigned int max_timestep, const double &TotTargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<Parameter> &par, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability){
 
   // Global variables
   extern int NIPY;
-  extern double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
-  extern double rho, wk, wk_1;
+
+  // Read parameters
+  double rho = GetParameterValueAccordingToSymbol(par, "rho");
+  double wk = GetParameterValueAccordingToSymbol(par, "wk");
+  double wk_1 = GetParameterValueAccordingToSymbol(par, "wk_1");
+  double CatchabilityScalingFactor = GetParameterValueAccordingToSymbol(par, "CatchabilityScalingFactor");
+  double BiomassScalingFactor = GetParameterValueAccordingToSymbol(par, "BiomassScalingFactor");
+  double RecruitmentScalingFactor = GetParameterValueAccordingToSymbol(par, "RecruitmentScalingFactor");
+  //int NIPY = (int) GetParameterValueAccordingToSymbol(par, "NIPY");
 
   // Normal random generator to simulate recruitment deviations from the mean
   std::default_random_engine generator;
@@ -49,17 +58,17 @@ int Projections2(const long unsigned int max_timestep, const double &TotTargeted
   std::vector< double > TargetedEffort(max_timestep, 0.0);
 
   // Remember that the optimizer work on parameters of the same order of magnitude
-  double M = par[0];
-  double Targeted_catchability = par[1] * CatchabilityScalingFactor;
-  double Nontargeted_catchability = par[2] * CatchabilityScalingFactor;
+  double M = GetParameterValueAccordingToSymbol(par, "M");
+  double Targeted_catchability = GetParameterValueAccordingToSymbol(par, "q1") * GetParameterValueAccordingToSymbol(par, "CatchabilityScalingFactor");
+  double Nontargeted_catchability = GetParameterValueAccordingToSymbol(par, "q2") * GetParameterValueAccordingToSymbol(par, "CatchabilityScalingFactor");
 
   // Initialise the vector of biomass
-  Biomass[0] = par[4] *  BiomassScalingFactor;
-  Biomass[1] = par[5] *  BiomassScalingFactor;
+  Biomass[0] = GetParameterValueAccordingToSymbol(par, "B1") * GetParameterValueAccordingToSymbol(par, "BiomassScalingFactor");
+  Biomass[1] = GetParameterValueAccordingToSymbol(par, "B2") * GetParameterValueAccordingToSymbol(par, "BiomassScalingFactor");
 
   // von mises parameters
-  double vm_mean = par[6]; // make sure it varies between -M_PI and +M_PI
-  double vm_sigma = par[7]; // should be positive
+  double vm_mean = GetParameterValueAccordingToSymbol(par, "vm_mean");
+  double vm_sigma = GetParameterValueAccordingToSymbol(par, "vm_sigma"); // should be positive
 
   // Construct the vector of Effort which is constant from year to year
   for(unsigned int i=0; i < max_timestep; i += 1){
@@ -76,9 +85,9 @@ int Projections2(const long unsigned int max_timestep, const double &TotTargeted
   std::vector<double> RecDist(NIPY, 0.0);
   RecDist = vonMisesRecDist(vm_mean, vm_sigma);
   
-  // Create the vector of recruitment for the first year
+  // Create the vector of recruitment for the first year (using estimate of magnitude of recruitment from the first year)
     for(unsigned int counter = 0; counter < NIPY; counter++){
-      Rec[counter] = par[8 + counter / NIPY] * RecruitmentScalingFactor * RecDist[counter % NIPY];
+      Rec[counter] = GetParameterValueAccordingToShortName(par, "Recruit year 1") * GetParameterValueAccordingToSymbol(par, "RecruitmentScalingFactor") * RecDist[counter % NIPY];
     }
 
   // Recursive calculation of biomass

@@ -1,9 +1,12 @@
 // CREATED  19 November 2013
-// MODIFIED  3 December 2015
+// MODIFIED  5 May 2016
 
 // version 0.1
 
-// USAGE (see DD_Option3Projections.sh) DD_Option3Projections.sh FixedWeeklyParameters.txt /tmp/ParEstimates.txt Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/AverageAvailability.txt 100
+// USAGE DD_Option3Projections Results/DelayDifferenceModelParameters.csv Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/Availability.txt 100
+
+// USAGE INTO A LOOP (see DD_Option3Projections.sh) DD_Option3Projections.sh Results/DelayDifferenceModelParameters.csv Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/Availability.txt 
+
 
 // COMPILE make DD_Option3Projections
 
@@ -32,58 +35,49 @@
 
 using namespace std;
 
-// Global variables
-double rho, wk, wk_1;
-double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
-int NIPY;
+  // Global variables
+  int NIPY;
 
-int Projections2(const long unsigned int max_timestep, const double &TargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<double> &par, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability);
+int Projections2(const long unsigned int max_timestep, const double &TargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<Parameter> &par, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability);
 
+ 
 int main(int argc, char *argv[]){
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //// Read the values of fixed parameters from file in local directory into global variables
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Read the values of fixed parameters from file in local directory into global variables
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  //string FixParfilename = "FixParameters.txt";
-  std::string arg1(argv[1]);
-  //display_file(arg1);
+// Read into a vector of class Parameter from CSV file containing values for the delay difference parameters
+std::string arg1(argv[1]);
+std::vector<Parameter> ModelInputParameters = ReadOutputParameterDescription(arg1);
 
-  rho = fill_from_file(arg1, "Brody growth coefficient");
-  wk = fill_from_file(arg1, "Estimated weight at recruitment");
-  wk_1 = fill_from_file(arg1, "Parameter defining weight one timestep before recruitment");
-  CatchabilityScalingFactor = fill_from_file(arg1, "Catchability scaling factor");
-  BiomassScalingFactor = fill_from_file(arg1, "Biomass scaling factor");
-  RecruitmentScalingFactor = fill_from_file(arg1, "Recruitment scaling factor");
-  NIPY = (int) fill_from_file(arg1, "Number of intervals in a year");
+double rho = GetParameterValueAccordingToSymbol(ModelInputParameters, "rho");
+double wk = GetParameterValueAccordingToSymbol(ModelInputParameters, "wk");
+double wk_1 = GetParameterValueAccordingToSymbol(ModelInputParameters, "wk_1");
+double CatchabilityScalingFactor = GetParameterValueAccordingToSymbol(ModelInputParameters, "CatchabilityScalingFactor");
+double BiomassScalingFactor = GetParameterValueAccordingToSymbol(ModelInputParameters, "BiomassScalingFactor");
+double RecruitmentScalingFactor = GetParameterValueAccordingToSymbol(ModelInputParameters, "RecruitmentScalingFactor");
+NIPY = (int) GetParameterValueAccordingToSymbol(ModelInputParameters, "NIPY");
 
   const int NbYear = 150;
+  double a;
 
-    // Read single column file containing parameters 
-    std::ifstream ParFile(argv[2]);
-    std::vector< double > Par;
-    double a;
+  // Read the fraction of biomass sexually mature at any time step 
+  std::ifstream MaturityFile(argv[2]);
+  std::vector< double > PropMature;
 
-    while(ParFile >> a){
-      Par.push_back(a);}
-    ParFile.close();
-    
-    cout << "Read in " << Par.size() << " estimated parameters from catch and effort data\n";
+while(MaturityFile >> a)
+  {
+PropMature.push_back(a);
+}
 
-    // Read single column file containing the proportion of biomass sexually mature in each week
-    std::ifstream MaturityFile(argv[3]);
-    std::vector< double > PropMature;
-
-    while(MaturityFile >> a){
-      PropMature.push_back(a);}
-    
-    assert(PropMature.size() == NIPY);
-    MaturityFile.close();
+assert(PropMature.size() == NIPY);
+MaturityFile.close();
 
     cout << "Read in " << PropMature.size() << " proportion of sexually mature biomass\n";
 
     // Read single column file containing the stock recruitment parameters
-    std::ifstream SRFile(argv[4]);
+    std::ifstream SRFile(argv[3]);
     std::vector< double > SrPar;
 
     while(SRFile >> a){
@@ -94,7 +88,7 @@ int main(int argc, char *argv[]){
     cout << "Read in " << SrPar.size() << " stock recruitment parameters\n";
 
     // Read single column file the fishing pattern
-    std::ifstream FishingPatternFile(argv[5]);
+    std::ifstream FishingPatternFile(argv[4]);
     std::vector< double > FishingPattern;
 
     while(FishingPatternFile >> a){
@@ -105,7 +99,7 @@ int main(int argc, char *argv[]){
     cout << "Read in " << FishingPattern.size() << " fishing pattern values\n";
 
     // Read single column file the availability
-    std::ifstream AvailabilityFile(argv[6]);
+    std::ifstream AvailabilityFile(argv[5]);
     std::vector< double > Availability;
 
     while(AvailabilityFile >> a){
@@ -116,7 +110,7 @@ int main(int argc, char *argv[]){
     cout << "Read in " << Availability.size() << " availability values\n";
 
     // Total targeted effort in a year is given as an input
-    double n = strtod(argv[7],NULL);
+    double n = strtod(argv[6],NULL);
     printf("Total effort per year is: %f\n",n);
 
     // Non-targeted effort is assumed to be null
@@ -124,7 +118,7 @@ int main(int argc, char *argv[]){
 
  
     // Perform projections and write results to file
-    Projections2(NbYear*NIPY, n, NontargetedEffort, Par, PropMature, SrPar, FishingPattern, Availability);
+    Projections2(NbYear*NIPY, n, NontargetedEffort, ModelInputParameters, PropMature, SrPar, FishingPattern, Availability);
     
   return 0;
 
