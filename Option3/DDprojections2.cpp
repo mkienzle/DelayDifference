@@ -11,13 +11,12 @@
 // COMPILE make DD_Option3Projections
 
 // PURPOSE project biomass long into the future using a delay difference model according to
-//         1. a set of fixed parameters also used in the delay difference model
-//         2. a set of delay difference parameters estimated during the fitting process
-//         3. a set of proportion of biomass spawning in each interval per year
-//         4. estimates of the stock-recruitment relationship
-//         5. proportion of total effort (yearly) allocated to each interval during the year
-//         6. pattern of prawn availability
-//         7. total yearly effort 
+//         1. a set of parameters for the delay difference model 
+//         2. a set of proportion of biomass spawning in each interval per year
+//         3. estimates of the stock-recruitment relationship
+//         4. proportion of total effort (yearly) allocated to each interval during the year
+//         5. pattern of prawn availability
+//         6. total yearly effort 
 
 #include <fstream>
 #include <sstream>

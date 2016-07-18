@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# USAGE DDprojections_Option3.sh FixedWeeklyParameters.txt Results/ParameterEstimates.txt Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/Availability.txt
+# USAGE DD_Option3Projections.sh Results/DelayDifferenceModelParameters.csv Data/WeeklyPercentageOfSpawners.txt Results/LinearizedRickerCoef Data/AverageEffortPattern.txt Data/Availability.txt
 
 
 #  CREATED  19 November 2013
