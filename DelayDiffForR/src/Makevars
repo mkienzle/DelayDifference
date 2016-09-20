@@ -1,0 +1,9 @@
+# CREATED  20 Sep 2016
+# MODIFIED 21 Sep 2016
+
+
+PKG_CXXFLAGS=-fpic -g -O2 -std=c++0x -I/usr/include $(shell root-config --libs --cflags --ldflags) -lMinuit2
+OBJS = $(shell ls /home/mkienzle/mystuff/Software/root-6.06.06/math/minuit2/src/*.o)
+
+PKG_LIBS= $(OBJS) -std=c++0x -O2 -I/usr/include $(shell root-config --libs --cflags --ldflags) -lMinuit2
+

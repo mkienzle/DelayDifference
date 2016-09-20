@@ -1,0 +1,4 @@
+#useDynLib(libMinuit2)
+useDynLib(DelayDiffForR)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
