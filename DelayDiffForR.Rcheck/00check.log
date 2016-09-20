@@ -1,0 +1,22 @@
+* using log directory ‘/home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR.Rcheck’
+* using R version 3.2.0 (2015-04-16)
+* using platform: x86_64-unknown-linux-gnu (64-bit)
+* using session charset: UTF-8
+* checking for file ‘DelayDiffForR/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘DelayDiffForR’ version ‘1.0’
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... WARNING
+Subdirectory ‘DelayDiffForR/src’ contains apparent object files/libraries
+  FitLW.o FitLW.so ObjectiveFCN.o libMinuit2.so
+Object files/libraries should not be included in a source package.
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘DelayDiffForR’ can be installed ... ERROR
+Installation failed.
+See ‘/home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR.Rcheck/00install.out’ for details.
+Status: 1 ERROR, 1 WARNING

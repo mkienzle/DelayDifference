@@ -1,5 +1,5 @@
 # CREATED  23 April 2014
-# MODIFIED  5 April 2016
+# MODIFIED 26 July  2016
 
 # AUTHOR Marco.Kienzle@gmail.com
 
@@ -14,14 +14,18 @@
 
 # Compile using static libraries for 64bit machine
 # CFLAGS = -m32 -g -O2 -Wall -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2 # with lots of warning
-CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2
+#CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2
+
+CFLAGS = $(shell root-config --cflags) 
+#CFLAGS = -pthread -std=c++11 -Wno-deprecated-declarations -m64 -I/usr/local/include
+LIBS = $(shell root-config --glibs) -lMinuit2
 
 ############################################################################################################################################
 ### 1. A program to fit the delay difference model to data and estimate parameters
 ############################################################################################################################################
 
 DelayDifference_Option2: FitDelayDifference.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o
-			g++ -o DelayDifference_Option2 /usr/lib/prob.o FitDelayDifference.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o $(CFLAGS)
+			g++ $(CFLAGS) -o DelayDifference_Option2 /usr/lib/prob.o FitDelayDifference.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o $(LIBS)
 
 UsefulFunctions.o: ../lib_facilities.h ../UsefulFunctions.h ../UsefulFunctions.cpp
 			g++ $(CFLAGS) -c ../UsefulFunctions.cpp

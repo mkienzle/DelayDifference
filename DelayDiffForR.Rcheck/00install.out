@@ -1,0 +1,19 @@
+* installing *source* package ‘DelayDiffForR’ ...
+** libs
+** arch - 
+make: 'FitLW.so' is up to date.
+installing to /home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR.Rcheck/DelayDiffForR/libs
+** R
+** preparing package for lazy loading
+** help
+Warning: /home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR/man/DelayDiffForR-package.Rd:27: All text must be in a section
+Warning: /home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR/man/DelayDiffForR-package.Rd:28: All text must be in a section
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+Error in library.dynam(lib, package, package.lib) : 
+  shared object ‘DelayDiffForR.so’ not found
+Error: loading failed
+Execution halted
+ERROR: loading failed
+* removing ‘/home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR.Rcheck/DelayDiffForR’

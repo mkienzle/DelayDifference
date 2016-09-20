@@ -1,11 +1,11 @@
 # CREATED  23 April 2014
-# MODIFIED  6 April 2016
+# MODIFIED 26 July  2016
 
 # AUTHOR Marco.Kienzle@gmail.com
 
 # PURPOSE build the weekly delay difference model
 
-CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2
+#CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2
 #CFLAGS = -std=c++0x -O2 -I/usr/include $(shell root-config --glibs --cflags) -lMinuit2
 #CFLAGS = -std=c++0x -O2 -I/usr/include -L/usr/local/lib/root -I/usr/local/include/root -lMinuit2
 
@@ -13,12 +13,16 @@ CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinui
 #CFLAGS = -std=c++0x -O2 -I/usr/include -L/usr/local/lib -L/usr/local/lib/root -I/usr/local/include/root -lRoot -lMinuit2 -static
 #CFLAGS = -std=c++0x -O2 -I/usr/include -L/usr/local/lib/root -I/usr/local/include/root -lRoot -lMinuit2
 
+CFLAGS = $(shell root-config --cflags) 
+#CFLAGS = -pthread -std=c++11 -Wno-deprecated-declarations -m64 -I/usr/local/include
+LIBS = $(shell root-config --glibs) -lMinuit2
+
 ##############################################################################################################################################################
 ### 1. A program to fit the delay difference model to data and estimate parameters
 ##############################################################################################################################################################
 
 DelayDifference_Option3: FitDelayDifference_Option3.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o
-			g++ -o DelayDifference_Option3 /usr/lib/prob.o FitDelayDifference_Option3.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o $(CFLAGS)
+			g++ $(CFLAGS) -o DelayDifference_Option3 /usr/lib/prob.o FitDelayDifference_Option3.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o $(LIBS)
 
 UsefulFunctions.o: ../lib_facilities.h ../UsefulFunctions.h ../UsefulFunctions.cpp
 			g++ $(CFLAGS) -c ../UsefulFunctions.cpp
