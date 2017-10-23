@@ -1,5 +1,5 @@
 // CREATED   10 Sept 2013
-// MODIFIED  28 Jul  2014
+// MODIFIED  25 Aug 2017
 
 // PURPOSE calculate biomass using a delay difference model with weekly timesteps
 
@@ -10,8 +10,9 @@
 #include <random>
 #include <fstream>
 #include <sstream>
+#include "../UsefulFunctions.h"
 
-std::vector<double> vonMisesRecDist(double a, double b);
+//std::vector<double> vonMisesRecDist(double a, double b);
 
 // STATUS working
 
@@ -84,7 +85,7 @@ int Projections2(const long unsigned int max_timestep, const double &TotTargeted
 
   // Calculate the proportion of recruitment in each week (kept constant between years)
   std::vector<double> RecDist(NIPY, 0.0);
-  RecDist = vonMisesRecDist(vm_mean, vm_sigma);
+  RecDist = vonMisesRecDist(vm_mean, vm_sigma, NIPY);
   
   // Create the vector of recruitment for the first year
     for(unsigned int counter = 0; counter < NIPY; counter++){

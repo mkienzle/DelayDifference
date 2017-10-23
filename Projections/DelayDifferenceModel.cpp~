@@ -1,0 +1,76 @@
+// file DelayDifferenceModel.cpp contains definitions of functions applicable to the DelayDifferenceModel class
+
+// CREATED  25 August 2017
+// MODIFIED 25 August 2017
+// AUTHOR Marco.Kienzle@gmail.com
+
+#include "DelayDifferenceModel.h"
+#include "../lib_facilities.h"
+#include "../UsefulFunctions.h"
+
+// Constructor
+DelayDifferenceModel::DelayDifferenceModel(std::string filename)
+{
+  std::cout << "I am going to read data from " << filename << std::endl;
+
+  // Create a vector of parameter using the file
+  std::vector<Parameter> ModelInputParameters = ReadOutputParameterDescription(filename);
+
+  // Temporal coverage of the model
+  NIPY = GetParameterValueAccordingToSymbol(ModelInputParameters, "NIPY");
+
+  // Biological parameters
+  B1 = GetParameterValueAccordingToSymbol(ModelInputParameters, "B1");
+  B2 = GetParameterValueAccordingToSymbol(ModelInputParameters, "B2");
+
+  rho = GetParameterValueAccordingToSymbol(ModelInputParameters, "rho");
+
+  wk = GetParameterValueAccordingToSymbol(ModelInputParameters, "wk");
+  wk_1 = GetParameterValueAccordingToSymbol(ModelInputParameters, "wk_1");
+
+  M = GetParameterValueAccordingToSymbol(ModelInputParameters, "M");
+
+  Targeted_q = GetParameterValueAccordingToSymbol(ModelInputParameters, "q1") * GetParameterValueAccordingToSymbol(ModelInputParameters, "CatchabilityScalingFactor");
+  NonTargeted_q = GetParameterValueAccordingToSymbol(ModelInputParameters, "q2") * GetParameterValueAccordingToSymbol(ModelInputParameters, "CatchabilityScalingFactor");
+
+}
+
+// Print object to screen
+void DelayDifferenceModel::Print(std::string Option)
+{
+  if( Option.compare("Screen") == 0 ){
+
+    std::cout << "# Number of timesteps in a year" << std::endl << NIPY << std::endl;
+    std::cout << "# Brody growth coefficient" << std::endl << rho << std::endl;
+    std::cout << "# Biomass at timestep 1" << std::endl << B1 << std::endl;
+    std::cout << "# Biomass at timestep 2" << std::endl << B2 << std::endl;
+    std::cout << "# Natural mortality" << std::endl << M << std::endl;
+
+    std::cout << "# Weight at recruitment" << std::endl << wk << std::endl;
+    std::cout << "# Weight 1 timestep before recruitment" << std::endl << wk_1 << std::endl;
+
+    std::cout << "# Targeted catchability" << std::endl << Targeted_q << std::endl;
+    std::cout << "# Non Targeted catchability" << std::endl << NonTargeted_q << std::endl;
+  } else {
+      // Open file for reading
+    ofstream file(Option.c_str());    // open file for reading
+    if (!file) error("can't open input file ",Option);
+
+    file << "# Brody growth coefficient" << std::endl << rho << std::endl;
+    file << "# Biomass at timestep 1" << std::endl << B1 << std::endl;
+    file << "# Biomass at timestep 2" << std::endl << B2 << std::endl;
+    file << "# Natural mortality" << std::endl << M << std::endl;
+
+    file << "# Weight at recruitment" << std::endl << wk << std::endl;
+    file << "# Weight 1 timestep before recruitment" << std::endl << wk_1 << std::endl;
+
+    file << "# Targeted catchability" << std::endl << Targeted_q << std::endl;
+    file << "# Non Targeted catchability" << std::endl << NonTargeted_q << std::endl;
+
+    
+    file.close();
+  }
+  
+}
+
+

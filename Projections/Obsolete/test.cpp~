@@ -1,0 +1,10 @@
+#include "DelayDifferenceModel.h"
+
+int main(){
+
+  DelayDifferenceModel MBTigerPrawn("Data/1990-2010Model10DelayDifferenceModelParameters.csv");
+
+  MBTigerPrawn.Print("Screen"); //MBTigerPrawn.Print("/tmp/file.txt");
+
+  return 0;
+};

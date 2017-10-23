@@ -1,0 +1,6 @@
+weekly.data <- read.csv("Results/Simulation/Projections_fortest.txt")
+#par(mfrow=c(4,1), mai = c(0,0,0,0))
+#with(weekly.data, plot(timestep, biomass)); abline(v = 52 * seq(1,100));
+#with(weekly.data, plot(timestep, recruitment)); abline(v = 52 * seq(1,100));
+#with(weekly.data, plot(timestep, catch)); abline(v = 52 * seq(1,100));
+#with(weekly.data, plot(timestep, effort)); abline(v = 52 * seq(1,100));

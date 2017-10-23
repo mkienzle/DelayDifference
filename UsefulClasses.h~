@@ -1,0 +1,20 @@
+// CREATED  29 April 2014
+// MODIFIED 25 Aug 2017
+
+// AUTHOR Marco.Kienzle@gmail.com
+
+// PURPOSE some useful classes
+
+// A class to hold parameters used in the model
+class Parameter
+{
+   public:
+     std::string LongName = "NA";
+     std::string ShortName = "NA";
+     std::string Symbol = "NA";
+     std::string Type = "NA"; // is it estimated or fixed
+     double Value = 0.0;
+     double Uncertainty = 0.0;
+     double Boundaries [2] = { 0.0 }; // lower or upper boundaries used during the estimation process;
+     std::string Unit = "NA";
+};

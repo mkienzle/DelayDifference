@@ -1,0 +1,3 @@
+#!/bin/sh
+
+DD_Option3Projections_fortest DelayDifferenceModelParameters.csv WeeklyPercentageOfSpawners.txt LinearizedBevertonAndHoltCoef AverageEffortPattern.txt AverageAvailability.txt

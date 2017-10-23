@@ -1,24 +1,14 @@
 // CREATED  29 April 2014
-// MODIFIED  5 April 2016
+// MODIFIED 31 Aug 2017
 
 // AUTHOR Marco.Kienzle@gmail.com
 
 // PURPOSE some useful functions
 
-// A class to hold parameters used in the model
-class Parameter
-{
-   public:
-     std::string LongName = "NA";
-     std::string ShortName = "NA";
-     std::string Symbol = "NA";
-     std::string Type = "NA"; // is it estimated or fixed
-     double Value = 0.0;
-     double Uncertainty = 0.0;
-     double Boundaries [2] = { 0.0 }; // lower or upper boundaries used during the estimation process;
-     std::string Unit = "NA";
-};
+#include "UsefulClasses.h"
 
+// von Mises distribution function
+std::vector<double> vonMisesRecDist(double a, double b, const int& NIPY);
 
 // Function to access vector of parameters
 double GetParameterValueAccordingToSymbol(const std::vector<Parameter> &ParVector, const std::string &Symbol);
@@ -41,6 +31,12 @@ void display_file(std::string& filename);
 double fill_from_file(std::string& filename, const std::string VariableDescription);
 std::vector<Parameter> ReadParameterDescription(const std::string& filename);
 std::vector<Parameter> ReadOutputParameterDescription(const std::string& filename);
+std::vector<ProjectionInputFiles> ReadProjectionInputFileDescription(const std::string& filename);
+
+std::vector<double> ReadParameterFromSingleColumnFile(const std::string& filename);
+
+// Function to access the path of file
+std::string GetProjectionFilePathAccordingToShortName(const std::vector<ProjectionInputFiles> &InputFileVector, const std::string &ShortName);
 
 // Write parameters to file
 void WriteParameterToCSV(const std::string& filename, std::vector<Parameter> ParVec);

@@ -3,7 +3,7 @@
 
 // VERSION 0.1
 
-// Copyright (c) 2013-16 Queensland Government, Department of Agriculture and Fisheries
+// Copyright (c) 2013-17 Queensland Government, Department of Agriculture and Fisheries
 // Programmed by Marco Kienzle
 // This code is distributed under the GNU GPL v.3 license (see at the bottom for more info)
 

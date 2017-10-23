@@ -1,5 +1,5 @@
 // CREATED  29 April 2014
-// MODIFIED  5 May 2016
+// MODIFIED 31 Aug 2017
 
 // AUTHOR Marco.Kienzle@gmail.com
 
@@ -10,7 +10,7 @@
 #include <fstream>
 #include <string>
 #include "lib_facilities.h"
-#include "UsefulFunctions.h"
+#include "UsefulClasses.h"
 #include <boost/algorithm/string.hpp>
 
 
@@ -20,7 +20,7 @@ void banner(std::string version_nb, std::string version_date)
 
   // Print a starting message
   std::cout << "\"Down under\" delay difference model version " << version_nb << " (" << version_date << ")\n";
-  std::cout << "Copyright (C) 2013-16 Queensland Government, Department of Agriculture and Fisheries\n";
+  std::cout << "Copyright (C) 2013-17 Queensland Government, Department of Agriculture and Fisheries\n";
   std::cout << "This code is distributed under the GNU GPL v.3 license (http://www.gnu.org/licenses/)\n\n";
 
 }
@@ -116,7 +116,7 @@ std::vector<Parameter> ReadParameterDescription(const std::string& filename)
     error("Inconsistent number of elements separated by commas in ",filename);
   
   // End of function execution message
-  std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
+  //std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
  
   return ParameterVector;
 }
@@ -185,7 +185,7 @@ std::vector<Parameter> ReadOutputParameterDescription(const std::string& filenam
     error("Inconsistent number of elements separated by commas in ",filename);
   
   // End of function execution message
-  std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
+  //std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
  
   return ParameterVector;
 }
@@ -387,10 +387,10 @@ double fill_from_file(std::string& filename, const std::string VariableDescripti
 // INPUT a is allowed to vary between -Inf and Inf
 //       b must be positive
 
-std::vector<double> vonMisesRecDist(double a, double b){
+std::vector<double> vonMisesRecDist(double a, double b, const int& NIPY){
 
 // Global variables
-extern int NIPY;
+//extern int NIPY;
 
 
   //  cout << "\n";
@@ -462,13 +462,13 @@ extern int NIPY;
 }
 
       // sometimes small negative probability appears 
-      if(intervals[i] < 0.0)
+      if(intervals[i] < 0.0){
 	// if they are small, replace them by zero
 	if(abs(intervals[i]) < 1e-5){ intervals[i] = 0.0;}
-      // otherwise throw an error
-	else{
-	  throw;}
-
+        // otherwise throw an error
+	else{throw;}
+      }
+      
      total += intervals[i];
       	}
  
@@ -487,3 +487,137 @@ extern int NIPY;
 // Read data from a specific column in a file. Columns of data in this file are separated by space
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //std::vector<double> ReadData(std::string &filename, std::int ColNb){}
+
+//
+// Get information about projections's input files
+//
+
+std::vector<ProjectionInputFiles> ReadProjectionInputFileDescription(const std::string& filename)
+{
+
+  // file variable 
+  std::string line;  // store lines in file
+  std::vector<int> N; // Number of elements per line
+  unsigned int line_number=0; // counter
+
+  // Container for the parameters information in the file
+  std::vector<ProjectionInputFiles> ProjectionInputFilesVector;
+
+  // Open file for reading
+  ifstream file(filename.c_str());    // open file for reading
+  if (!file) error("can't open input file ",filename);
+
+  // Read lines from file
+  while(getline(file,line)){
+
+    if(line.length() > 0){
+      line_number++; // count the number of lines
+
+      // Read lines content into a vector
+      std::istringstream iss(line);
+      std::string token;
+      std::vector<std::string> tokens;
+    
+      while(std::getline(iss, token, ','))
+	tokens.push_back(token);
+
+      // How many element were read from each line 
+      N.push_back(tokens.size());
+
+      if(line_number == 1) {} // skip the headerdo nothing with the file header
+    
+      else{
+    
+	ProjectionInputFiles SingleLine;
+
+	// Assign entries in each line to a variable of type Parameter
+	SingleLine.LongName = tokens[0];
+	SingleLine.ShortName = tokens[1];
+	SingleLine.Path = tokens[2];
+
+	//std::cout << "Token[0] is " << tokens[0] << std::endl;
+	ProjectionInputFilesVector.push_back(SingleLine); // Add parameter to the vector of parameters
+
+      } // End of else
+    } // End of if(line.length() > 0
+  } // End of while
+
+  file.close();
+
+  // Check that all lines contains the same number of elements separated by commas
+  if (std::adjacent_find(N.begin(), N.end(), std::not_equal_to<int>() ) != N.end() )
+    error("Inconsistent number of elements separated by commas in ",filename);
+  
+  // End of function execution message
+  //std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
+ 
+  return ProjectionInputFilesVector;
+}
+
+// Get projection file path according to short name
+std::string GetProjectionFilePathAccordingToShortName(const std::vector<ProjectionInputFiles> &InputFileVector, const std::string &ShortName){
+
+    for(unsigned int i = 0; i < InputFileVector.size(); ++i)
+      {
+	if( InputFileVector[i].ShortName.compare(ShortName) == 0) 
+	{
+	  return InputFileVector[i].Path;
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetProjectionFilePathAccordingToShortName(): no value found for short name " + ShortName + " in input parameter file.");
+    
+}
+
+// A function to read a single raw of data in a file
+// applies to Stock Recruitment parameters, weekly effort pattern, weekly availability, weekly percentage of maturity
+std::vector<double> ReadParameterFromSingleColumnFile(const std::string& filename)
+{
+
+  // file variable 
+  std::string line;  // store lines in file
+  std::vector<int> N; // Number of elements per line
+  unsigned int line_number=0; // counter
+
+  // Container for the parameters information in the file
+  std::vector<double> ValueVector;
+
+  // Open file for reading
+  ifstream file(filename.c_str());    // open file for reading
+  if (!file) error("can't open input file ", filename);
+
+  // Read lines from file
+  while(getline(file,line)){
+
+    if(line.length() > 0){
+      line_number++; // count the number of lines
+
+      // Read lines content into a vector
+      std::istringstream iss(line);
+      std::string token;
+      std::vector<std::string> tokens;
+    
+      while(std::getline(iss, token, ','))
+	tokens.push_back(token);
+
+      // How many element were read from each line 
+      N.push_back(tokens.size());
+
+	ValueVector.push_back(atof(token.c_str())); // Add parameter to the vector of parameters
+
+    } // End of if(line.length() > 0
+
+  } // End of while
+
+  file.close();
+
+  // Check that all lines contains the same number of elements separated by commas
+  if(std::adjacent_find(N.begin(), N.end(), std::not_equal_to<int>() ) != N.end() )
+    error("Inconsistent number of elements separated by commas in ",filename);
+
+  // End of function execution message
+  //std::cout << "Finished reading " << ValueVector.size() << " parameters descriptions from file " << filename << "\n";
+
+  return ValueVector;
+}
+

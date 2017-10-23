@@ -1,0 +1,37 @@
+LongName,ShortName,Symbol,Type,Value,Uncertainty,Unit
+Number of intervals in a year,NA,NIPY,Fixed,52,0,weeks
+Brody growth coefficient,NA,rho,Fixed,0.96328,0,dimensionless
+Weight at recruitment at 22 weeks,weight at recruitment,wk,Fixed,0.0195,0,kilograms
+Parameter defining weight one timestep before recruitment at week 21,Parameter defining weight one timestep before recruitment,wk_1,Fixed,0.017756,0,kilograms
+Catchability scaling factor,Catchability scaling factor,CatchabilityScalingFactor,Fixed,0.0001,0,dimensionless
+Targeted catchability,Targeted q,q1,Estimated,2.23821,0.360389,per unit effort per week
+NonTargeted catchability,Nontargeted q,q2,Fixed,0.839521,0.152738,per unit effort per week
+Natural mortality,Natural mortality,M,Estimated,0.0354239,0.00178412,per week
+Standard error of observation,sigma,sigma,Estimated,5.85632,0.126924,unit of catch
+Biomass scaling factor,Biomass scaling factor,BiomassScalingFactor,Fixed,100000,0,dimensionless
+Biomass at 1st time step,Biomass1,B1,Estimated,2.18665,0.698764,unit of catch
+Biomass at 2nd time step,Biomass2,B2,Estimated,2.05087,0.62779,unit of catch
+Recruitment scaling factor,Recruitment scaling factor,RecruitmentScalingFactor,Fixed,1e+07,0,dimensionless
+Magnitude of recruitment in year 1,Recruit year 1,R01,Estimated,0.917791,0.130466,count of fish
+Magnitude of recruitment in year 2,Recruit year 2,R02,Estimated,0.656801,0.0872633,count of fish
+Magnitude of recruitment in year 3,Recruit year 3,R03,Estimated,0.942158,0.126957,count of fish
+Magnitude of recruitment in year 4,Recruit year 4,R04,Estimated,0.789456,0.109452,count of fish
+Magnitude of recruitment in year 5,Recruit year 5,R05,Estimated,0.884623,0.122782,count of fish
+Magnitude of recruitment in year 6,Recruit year 6,R06,Estimated,0.863181,0.109988,count of fish
+Magnitude of recruitment in year 7,Recruit year 7,R07,Estimated,1.05759,0.116284,count of fish
+Magnitude of recruitment in year 8,Recruit year 8,R08,Estimated,0.354671,0.0506319,count of fish
+Magnitude of recruitment in year 9,Recruit year 9,R09,Estimated,0.931939,0.0972725,count of fish
+Magnitude of recruitment in year 10,Recruit year 10,R10,Estimated,1.26616,0.125493,count of fish
+Magnitude of recruitment in year 11,Recruit year 11,R11,Estimated,0.476138,0.0533288,count of fish
+Magnitude of recruitment in year 12,Recruit year 12,R12,Estimated,1.29678,0.156183,count of fish
+Magnitude of recruitment in year 13,Recruit year 13,R13,Estimated,1.09701,0.107424,count of fish
+Magnitude of recruitment in year 14,Recruit year 14,R14,Estimated,0.991571,0.101509,count of fish
+Magnitude of recruitment in year 15,Recruit year 15,R15,Estimated,1.56359,0.142855,count of fish
+Magnitude of recruitment in year 16,Recruit year 16,R16,Estimated,0.997944,0.099301,count of fish
+Magnitude of recruitment in year 17,Recruit year 17,R17,Estimated,1.90074,0.182476,count of fish
+Magnitude of recruitment in year 18,Recruit year 18,R18,Estimated,1.38317,0.144178,count of fish
+Magnitude of recruitment in year 19,Recruit year 19,R19,Estimated,1.1979,0.149017,count of fish
+Magnitude of recruitment in year 20,Recruit year 20,R20,Estimated,1.51575,0.192691,count of fish
+Magnitude of recruitment in year 21,Recruit year 21,R21,Estimated,1.64508,0.201569,count of fish
+Mean of recruitment distribution through time according to a von Mises,vm_mean,vm_mean,Estimated,0.526088,0.0290683,dimensionless on a scale from -pi to pi
+Standard deviation of recruitment distribution through time according to a von Mises,vm_sigma,vm_sigma,Estimated,4.73566,0.56721,dimensionless

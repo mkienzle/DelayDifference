@@ -1,5 +1,5 @@
 // CREATED   10 Sep 2013
-// MODIFIED   6 Apr 2016
+// MODIFIED  25 Aug 2017
 
 // PURPOSE calculate biomass using a delay difference model with weekly timesteps
 
@@ -10,8 +10,9 @@
 #include <random>
 #include <fstream>
 #include <sstream>
+#include "../UsefulFunctions.h"
 
-std::vector<double> vonMisesRecDist(double a, double b);
+//std::vector<double> vonMisesRecDist(double a, double b);
 
 // STATUS working
 
@@ -24,7 +25,7 @@ std::vector<double> vonMisesRecDist(double a, double b);
 //           7. a vector giving the proportion of effort in each week (it sum = 1)
 //           8. a vector giving the fraction ( 1 <= x <= 0) of stock available to fishing in each week
 
-#include "../UsefulFunctions.h"
+//#include "../UsefulFunctions.h"
 
 int Projections(const long unsigned int max_timestep, const double &TotTargetedEffort, const std::vector<double> &NontargetedEffort, const std::vector<Parameter> &ParameterVector, std::vector<double> &PropMature, std::vector<double> &SrPar, std::vector<double> &FishingPattern, std::vector<double> &Availability){
 
@@ -83,7 +84,7 @@ int Projections(const long unsigned int max_timestep, const double &TotTargetedE
 
   // Calculate the proportion of recruitment in each week (kept constant between years)
   std::vector<double> RecDist(NIPY, 0.0);
-  RecDist = vonMisesRecDist(vm_mean, vm_sigma);
+  RecDist = vonMisesRecDist(vm_mean, vm_sigma, NIPY);
   
   // Create the vector of recruitment for the first year using an initial recruitment
   double MagnitudeOfInitialRecruitment=1.5;

@@ -9,4 +9,4 @@ Description: More about what it does (maybe more than one line)
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.12.3)
 LinkingTo: Rcpp
-Built: R 3.2.0; x86_64-unknown-linux-gnu; 2016-09-20 21:30:57 UTC; unix
+Built: R 3.2.0; x86_64-unknown-linux-gnu; 2016-09-21 02:26:36 UTC; unix

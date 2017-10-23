@@ -1,0 +1,6 @@
+LongName,ShortName,FilePath
+parameter for calibrate delay difference,DDpar,Data/1990-2010Model10DelayDifferenceModelParameters.csv
+stock recruitment relationship parameters,SRRpar,/home/mkienzle/mystuff/Work/DEEDI/Biometry services/Fisheries/MoretonBay/TigerPrawn/Analysis/Scripts/DelayDifferenceModel/1990-2010/Weekly/model10/Results/LinearizedBevertonAndHoltCoef
+average weekly availability,Avail,/home/mkienzle/mystuff/Work/DEEDI/Biometry services/Fisheries/MoretonBay/TigerPrawn/Analysis/Scripts/DelayDifferenceModel/1990-2010/Weekly/model10/Data/AverageAvailability.txt
+average weekly effort pattern from 2006 to 2010,EffortPat,/home/mkienzle/mystuff/Work/DEEDI/Biometry services/Fisheries/MoretonBay/TigerPrawn/Analysis/Scripts/DelayDifferenceModel/1990-2010/Weekly/model10/Data/AverageEffortPattern.txt
+survey estimates of percentage of spawners,PercSpawners,/home/mkienzle/mystuff/Work/DEEDI/Biometry services/Fisheries/MoretonBay/TigerPrawn/Analysis/Scripts/DelayDifferenceModel/1990-2010/Weekly/model10/Data/WeeklyPercentageOfSpawners.txt

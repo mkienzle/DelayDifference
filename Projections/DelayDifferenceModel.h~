@@ -1,0 +1,47 @@
+// file DelayDifferenceModel.h
+
+// CREATED  25 August 2017
+// MODIFIED 25 August 2017
+// AUTHOR Marco.Kienzle@gmail.com
+
+#include "../lib_facilities.h"
+
+class DelayDifferenceModel {
+
+ public:
+
+  // Initialise an instance of this object by reading information from file
+  DelayDifferenceModel(std::string filename);
+
+  // Print object to screen (if Option is "Screen") otherwise to file (Option gives the path to the file)
+  void Print(std::string Option);
+private:
+
+  //// Temporal coverage of the model
+  // How many years does it span // NOT RELEVENT
+  // unsigned int NbOfYears; // NOT RELEVENT
+  // Number of time steps per year
+  unsigned int NIPY;
+
+  //// Biological parameters
+  
+  // Biomasses at timestep 1 and 2
+  double B1, B2;
+
+  // Brody growth parameter
+  double rho;
+
+  // Weight at recruitment
+  double wk, wk_1;
+
+  // Natural mortality
+  double M;
+
+  // availability
+  
+  //// Fishing fleet parameters
+  
+  // Targeted and non-targeted catchability
+  double Targeted_q, NonTargeted_q;
+};
+

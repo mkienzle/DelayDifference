@@ -37,53 +37,76 @@ Type 'q()' to quit R.
 > 
 > data(lw)
 > FitLW(lw[,1], lw[,2], lw[,3])
+minimum: 
+Minuit did successfully converge.
+# of function calls: 71
+minimum function Value: 3.350797967826
+minimum edm: 5.177730096321e-09
+minimum internal state vector: LAVector parameters:
+  0.0007423542292706
+       3.00253066562
 
- *** Break *** segmentation violation
-
-
-
-===========================================================
-There was a crash.
-This is the entire stack trace of all threads:
-===========================================================
-#0  0x00007f5ac95e364a in __GI___waitpid (pid=4948, stat_loc=stat_loc
-entry=0x7ffd716c5c80, options=options
-entry=0) at ../sysdeps/unix/sysv/linux/waitpid.c:29
-#1  0x00007f5ac955cfab in do_system (line=<optimized out>) at ../sysdeps/posix/system.c:148
-#2  0x00007f5ac4ebc434 in TUnixSystem::StackTrace() () from /home/mkienzle/mystuff/Software/root-6.06.06/lib/libCore.so
-#3  0x00007f5ac4ebe70c in TUnixSystem::DispatchSignals(ESignals) () from /home/mkienzle/mystuff/Software/root-6.06.06/lib/libCore.so
-#4  <signal handler called>
-#5  0x0000000000000000 in ?? ()
-#6  0x00007f5ac5292782 in ROOT::Minuit2::ModularFunctionMinimizer::Minimize(ROOT::Minuit2::FCNBase const&, ROOT::Minuit2::MnUserParameterState const&, ROOT::Minuit2::MnStrategy const&, unsigned int, double) const () from /home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR.Rcheck/DelayDiffForR/libs/DelayDiffForR.so
-#7  0x00007f5ac5258076 in ROOT::Minuit2::MnApplication::operator()(unsigned int, double) () from /home/mkienzle/mystuff/Programs/C++/DelayDifference/DelayDiffForR.Rcheck/DelayDiffForR/libs/DelayDiffForR.so
-#8  0x00007f5ac521ffbb in FitLW (x=<optimized out>, y=<optimized out>, z=<optimized out>) at FitLW.cpp:54
-#9  0x000000000047fdc0 in do_dotcall (call=0x417a568, op=<optimized out>, args=<optimized out>, env=<optimized out>) at dotcode.c:1251
-#10 0x00000000004bbe5f in Rf_eval (e=0x417a568, rho=rho
-entry=0x417a220) at eval.c:655
-#11 0x00000000004bdd89 in do_begin (call=0x417a5d8, op=0x27082a8, args=0x417a5a0, rho=0x417a220) at eval.c:1716
-#12 0x00000000004bbcc9 in Rf_eval (e=0x417a5d8, rho=0x417a220) at eval.c:627
-#13 0x00000000004bceaf in Rf_applyClosure (call=call
-entry=0x4179be8, op=op
-entry=0x4179a60, arglist=0x417a3e0, rho=rho
-entry=0x2731a98, suppliedvars=0x26fac58) at eval.c:1039
-#14 0x00000000004bbaf9 in Rf_eval (e=e
-entry=0x4179be8, rho=rho
-entry=0x2731a98) at eval.c:674
-#15 0x00000000004e0c21 in Rf_ReplIteration (rho=rho
-entry=0x2731a98, savestack=savestack
-entry=0, browselevel=browselevel
-entry=0, state=state
-entry=0x7ffd716c9920) at main.c:258
-#16 0x00000000004e0f48 in R_ReplConsole (rho=0x2731a98, savestack=savestack
-entry=0, browselevel=browselevel
-entry=0) at main.c:308
-#17 0x00000000004e0fd1 in run_Rmainloop () at main.c:1002
-#18 0x00000000004e1012 in Rf_mainloop () at main.c:1009
-#19 0x0000000000418ec8 in main (ac=ac
-entry=2, av=av
-entry=0x7ffd716caa58) at Rmain.c:29
-#20 0x00007f5ac9538830 in __libc_start_main (main=0x418eb0 <main>, argc=2, argv=0x7ffd716caa58, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffd716caa48) at ../csu/libc-start.c:291
-#21 0x0000000000418ef8 in _start ()
-===========================================================
+minimum internal covariance matrix: LASymMatrix parameters:
+  4.9626903e-10 -1.6260571e-07
+ -1.6260571e-07   5.349851e-05
 
 
+# ext. ||   Name    ||   type  ||     Value     ||  Error +/- 
+
+   0   ||         a ||  free   ||  0.0007423542292706 ||2.227709654734e-05
+   1   ||         b ||  free   ||       3.00253066562 ||0.007314267532963
+
+
+
+
+
+[1] 0
+> 
+> # customize synthetic dataset
+> length<-runif(1000,20,80);
+> a<-0.75; b<-2 ;
+> weight<-a*length^b;lengthbin<-floor(length);
+> data<-cbind(as.numeric(names(tapply(weight,lengthbin+0.5,mean))),tapply(weight,lengthbin+0.5,mean),sqrt(tapply(weight,lengthbin+0.5,var)));
+> FitLW(data[,1], data[,2], data[,3])
+minimum: 
+Minuit did successfully converge.
+# of function calls: 295
+minimum function Value: 2.669004011107
+minimum edm: 7.088726617532e-07
+minimum internal state vector: LAVector parameters:
+     0.7513383956679
+      1.999652771238
+
+minimum internal covariance matrix: LASymMatrix parameters:
+  0.00020968047 -6.8210429e-05
+ -6.8210429e-05  2.2294596e-05
+
+
+# ext. ||   Name    ||   type  ||     Value     ||  Error +/- 
+
+   0   ||         a ||  free   ||     0.7513383956679 ||0.0144803478707
+   1   ||         b ||  free   ||      1.999652771238 ||0.004721715358146
+
+
+
+
+
+[1] 0
+> 
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  0.584 0.02 0.602 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

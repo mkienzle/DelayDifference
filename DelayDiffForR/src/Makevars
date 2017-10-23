@@ -3,7 +3,9 @@
 
 
 PKG_CXXFLAGS=-fpic -g -O2 -std=c++0x -I/usr/include $(shell root-config --libs --cflags --ldflags) -lMinuit2
-OBJS = $(shell ls /home/mkienzle/mystuff/Software/root-6.06.06/math/minuit2/src/*.o)
+#OBJS = $(shell ls /home/mkienzle/mystuff/Software/root-6.06.06/math/minuit2/src/*.o)
+#OBJS = $(shell ls ../tmp/*.o)
 
 PKG_LIBS= $(OBJS) -std=c++0x -O2 -I/usr/include $(shell root-config --libs --cflags --ldflags) -lMinuit2
+
 
