@@ -4,7 +4,7 @@
 // This is a standard, ROOT and others library support code for the delay difference model
 //
 
-// lib facilities including minimization library
+// lib facilities excluding minimization library
 
 #ifndef STD_LIB_FACILITIES_GUARD
 #define STD_LIB_FACILITIES_GUARD 1
@@ -18,22 +18,6 @@
 #include <string>
 #include <sstream>
 #include <vector>
-
-// Minimization library MINUIT
-#include "Minuit2/FunctionMinimum.h"
-#include "Minuit2/MnUserParameterState.h"
-#include "Minuit2/MnPrint.h"
-#include "Minuit2/MnMigrad.h"
-#include "Minuit2/MnMinos.h"
-#include "Minuit2/MnContours.h"
-#include "Minuit2/MnPlot.h"
-#include "Minuit2/MinosError.h"
-#include "Minuit2/ContoursError.h"
-
-// #include <vector>
-// #include <iostream>
-// #include <math.h>
-// #include <cmath>
 
 using namespace std;
 

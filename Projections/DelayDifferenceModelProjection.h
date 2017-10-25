@@ -5,7 +5,7 @@
 // AUTHOR Marco.Kienzle@gmail.com
 
 #include "../UsefulClasses.h"
-#include "../lib_facilities.h"
+#include "../lib_facilities2.h"
 
 // This DelayDifferenceModelProjection class inherit from a DelayDifferenceModel which contains parameters estimated from fitting a delay-difference model to logbook data. Variable required for projecting a delay-difference (such as the number of year to project forward, the stock-recruitment relationship to close the loop, ...) are combined with the delay difference model into this class.
 

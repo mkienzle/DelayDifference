@@ -22,7 +22,7 @@ MDPprojectionType1: DelayDifferenceModel.o DelayDifferenceModelProjection.o Usef
 Tutorial: DelayDifferenceModel.o DelayDifferenceModelProjection.o UsefulFunctions.o Tutorial.cpp 
 			g++ $(CFLAGS) -o Tutorial Tutorial.cpp /usr/lib/prob.o DelayDifferenceModel.o DelayDifferenceModelProjection.o UsefulFunctions.o $(LIBS)
 
-UsefulFunctions.o: ../lib_facilities.h ../UsefulFunctions.h ../UsefulFunctions.cpp
+UsefulFunctions.o: ../lib_facilities2.h ../UsefulFunctions.h ../UsefulFunctions.cpp
 			g++ $(CFLAGS) -c ../UsefulFunctions.cpp
 
 DelayDifferenceModel.o: DelayDifferenceModel.h DelayDifferenceModel.cpp ../UsefulFunctions.cpp ../UsefulClasses.h

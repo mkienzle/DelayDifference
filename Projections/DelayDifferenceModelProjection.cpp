@@ -6,13 +6,14 @@
 
 #include "DelayDifferenceModel.h"
 #include "DelayDifferenceModelProjection.h"
-#include "../lib_facilities.h"
+#include "../lib_facilities2.h"
 #include "../UsefulFunctions.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include <cassert>
 
 // Constructor
 DelayDifferenceModelProjection::DelayDifferenceModelProjection(std::string filename)
