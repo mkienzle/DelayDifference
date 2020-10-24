@@ -1,5 +1,5 @@
 // CREATED   10 Sep 2013
-// MODIFIED  25 Aug 2017
+// MODIFIED  29 Apr 2014
 
 // PURPOSE calculate biomass using a delay difference model with weekly timesteps
 
@@ -7,9 +7,8 @@
 # include <vector>
 # include <iostream>
 # include <cassert>
-# include "../UsefulFunctions.h"
 
-//std::vector<double> vonMisesRecDist(double a, double b, const int& NIPY);
+std::vector<double> vonMisesRecDist(double a, double b);
 
 // STATUS working, converging to the simulated parameters
 
@@ -58,7 +57,7 @@ void DelayDifference(const std::vector<double> &TargetedEffort, const std::vecto
 
   // Calculate the proportion of recruitment in each week 
   std::vector<double> RecDist(NIPY, 0.0);
-  RecDist = vonMisesRecDist(vm_mean, vm_sigma,NIPY);
+  RecDist = vonMisesRecDist(vm_mean, vm_sigma);
   
   // Create the vector of recruitment
     for(unsigned int counter = 0; counter < max_timestep; counter++){

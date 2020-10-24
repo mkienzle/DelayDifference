@@ -1,7 +1,7 @@
 // CREATED   10 Sept 2013
-// MODIFIED  25 Aug 2017
+// MODIFIED  20 May 2014
 
-// Copyright (c) 2013, 2017 Queensland Government, Department of Agriculture, Forestry, and Fisheries
+// Copyright (c) 2013, 2014 Queensland Government, Department of Agriculture, Forestry, and Fisheries
 // Programmed by Marco Kienzle
 // This code is distributed under the GNU GPL v.3 license (see at the bottom for more info)
 
@@ -11,9 +11,8 @@
 # include <vector>
 # include <iostream>
 # include <cassert>
-# include "../UsefulFunctions.h"
 
-//std::vector<double> vonMisesRecDist(double a, double b);
+std::vector<double> vonMisesRecDist(double a, double b);
 
 // STATUS working, converging to the simulated parameters
 
@@ -56,7 +55,7 @@ void WeeklyDD(const std::vector<double> &TargetedEffort, const std::vector<doubl
 
   // Calculate the proportion of recruitment in each week 
   std::vector<double> RecDist(NIPY, 0.0);
-  RecDist = vonMisesRecDist(vm_mean, vm_sigma,NIPY);
+  RecDist = vonMisesRecDist(vm_mean, vm_sigma);
   
   // Create the vector of recruitment
     for(unsigned int counter = 0; counter < max_timestep; counter++){

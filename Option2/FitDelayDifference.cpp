@@ -1,9 +1,9 @@
 // CREATED  10 Sep 2013
-// MODIFIED  5 Apr 2016
+// MODIFIED 24 Oct 2020
 
-// VERSION 0.1
+// VERSION 0.2
 
-// Copyright (c) 2013-16 Queensland Government, Department of Agriculture and Fisheries
+// Copyright (c) 2013, 2014 Queensland Government, Department of Agriculture, Forestry, and Fisheries
 // Programmed by Marco.Kienzle@gmail.com
 
 // This code is distributed under the GNU GPL v.3 license (see at the bottom for more info)
@@ -11,17 +11,16 @@
 // PURPOSE fit a delay difference model to a series of catch and effort data grouped into intervals (week, month or else) 
 //         by maximum likelihood
 
-// USAGE example: ./DelayDifference_Option2 Data/SimData4.txt InputParameterDescription.csv
+// USAGE example: ./DelayDifference_Option2 Data/SimData4.txt FixedWeeklyParameters.txt
 
 // ARGUMENT(1) the path to a file containing formatted data into 7 columns format containing: (1) timestep (2) label for the type of year used (3) numeric value of year (4) numeric value for the timestep (5) catch (6) targeted and (7) un-targeted effort data from file
-// ARGUMENT(2) this program reads input parameters from a CSV file passed as the second argument. This file contains the following information: LongName,ShortName,Symbol,Type,Value,LowerLimit,UpperLimit,Unit
+// ARGUMENT(2) this program reads fixed parameters values from a file passed as the second argument
 
 // DATA input data were simulated using the script SimulatePopDynamic.R in ~/mystuff/Work/DEEDI/Moreton Bay Prawn Trawl fishery/Analysis/Scripts/DelayDifferenceModel/1989-2010/Weekly/Test the code 
 
 // COMPILE make all
 
 // CHANGES 2014-05-27 vonMisesRecDist was modified so that its input "a" is changed into ("a" %modulo% M_PI) so "a" can vary between -Inf and +Inf while the mean of von Mises is [-M_PI; M_PI]
-// CHANGES 2016-04-05 format of file containing input parameters
 
 // OBSOLETE g++ -std=c++0x -g -o FitWeeklyDelayDifference -I/usr/include /usr/lib/prob.o vonMisesRecDist.cxx FitWeeklyDelayDifference.cxx LogLikelihoodFunction.cxx WeeklyDelayDifference.cxx `root-config --glibs --cflags` -lMinuit2
 
@@ -43,7 +42,7 @@ int NIPY;
 int main( int argc, char *argv[]) {
 
   // Starting message
-  banner("0.1, option 2", "2016-04-05");
+  banner("0.1, option 2", "2014-07-15");
 
   // We assume argv[1] is a filename to read the data from
   std::ifstream ifs(argv[1]);
@@ -70,79 +69,63 @@ int main( int argc, char *argv[]) {
   ifs.close();
   }catch(ReadingError){ std::cerr << "Error: could not read the entire file\n"; return 1;}
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //// Read values for input parameters from file passed as a second argument
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //// Read the values of fixed parameters from file in local directory into global variables
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // Read file into a vector of class Parameter
+  //string FixParfilename = "FixParameters.txt";
   std::string arg2(argv[2]);
-  std::vector<Parameter> ModelInputParameters = ReadParameterDescription(arg2);
-
   //display_file(arg2);
 
-  // Assign fixed model's parameter set according to the information provided by the user in the csv file passed as 2nd argument
+  rho = fill_from_file(arg2, "Brody growth coefficient");
+  wk = fill_from_file(arg2, "Estimated weight at recruitment");
+  wk_1 = fill_from_file(arg2, "Parameter defining weight one timestep before recruitment");
+  M = fill_from_file(arg2, "Natural mortality");
+  CatchabilityScalingFactor = fill_from_file(arg2, "Catchability scaling factor");
+  BiomassScalingFactor = fill_from_file(arg2, "Biomass scaling factor");
+  RecruitmentScalingFactor = fill_from_file(arg2, "Recruitment scaling factor");
+  NIPY = (int) fill_from_file(arg2, "Number of intervals in a year");
 
-  rho = GetParameterValueAccordingToSymbol(ModelInputParameters, "rho");
-  wk = GetParameterValueAccordingToSymbol(ModelInputParameters, "wk");
-  wk_1 = GetParameterValueAccordingToSymbol(ModelInputParameters, "wk_1");
-  M = GetParameterValueAccordingToSymbol(ModelInputParameters, "M");
-  CatchabilityScalingFactor = GetParameterValueAccordingToSymbol(ModelInputParameters, "CatchabilityScalingFactor");
-  BiomassScalingFactor = GetParameterValueAccordingToSymbol(ModelInputParameters, "BiomassScalingFactor");
-  RecruitmentScalingFactor = GetParameterValueAccordingToSymbol(ModelInputParameters, "RecruitmentScalingFactor");
-  NIPY = (int) GetParameterValueAccordingToSymbol(ModelInputParameters, "NIPY");
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Standard minimization using MIGRAD
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //// Standard minimization using MIGRAD
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // Declare the objective function (also called FCN function in documentation)  
   LogLikelihoodFunction fFCN(FishCatch, Targeted_Effort, Nontargeted_Effort);
 
-  // Create parameters to be estimated using Minuit using values provided by the user
+  // create Minuit parameters with names
   MnUserParameters upar;
-  upar.Add("Targeted q", GetParameterValueAccordingToShortName(ModelInputParameters, "Targeted q"), 2);
-  upar.Add("Nontargeted q", GetParameterValueAccordingToShortName(ModelInputParameters, "Nontargeted q"), 2);
-  upar.Add("sigma", GetParameterValueAccordingToShortName(ModelInputParameters, "sigma"), 0.1);
-  upar.Add("Biomass1", GetParameterValueAccordingToShortName(ModelInputParameters, "Biomass1"), 2);
-  upar.Add("Biomass2", GetParameterValueAccordingToShortName(ModelInputParameters, "Biomass2"), 2);
-  upar.Add("vm_mean", GetParameterValueAccordingToShortName(ModelInputParameters, "vm_mean"), 1);
-  upar.Add("vm_sigma", GetParameterValueAccordingToShortName(ModelInputParameters, "vm_sigma"), 2);
+  upar.Add("Targeted q", 4, 2);
+  upar.Add("Nontargeted q", 2, 2);
+  upar.Add("sigma", 10, 0.1);
+  upar.Add("Biomass1", 1, 2);
+  upar.Add("Biomass2", 1, 2);
+  upar.Add("vm_mean", 0, 1);
+  upar.Add("vm_sigma", 5, 2);
 
   std::string RecVarName="Recruit year";
   for(unsigned int i = 1; i <= counter / NIPY; ++i){
-    //    upar.Add(RecVarName + " " + std::to_string(i), 0.2 * (i+1), .5);
-     upar.Add(RecVarName + " " + std::to_string(i), GetParameterValueAccordingToShortName(ModelInputParameters, RecVarName + " " + std::to_string(i)), .5);
+    upar.Add(RecVarName + " " + std::to_string(i), 0.2 * (i+1), .5);
   }
-  // Assert parameters domain searched during the minimization
-  upar.SetLimits("Targeted q", GetParameterLowerLimitAccordingToShortName(ModelInputParameters, "Targeted q"), 
-		 GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "Targeted q"));
-  upar.SetLimits("Nontargeted q", GetParameterLowerLimitAccordingToShortName(ModelInputParameters, "Nontargeted q"), 
-		 GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "Nontargeted q"));
-  upar.SetLimits("sigma", GetParameterLowerLimitAccordingToShortName(ModelInputParameters, "sigma"), 
-		 GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "sigma"));
-  upar.SetLimits("Biomass1", GetParameterLowerLimitAccordingToShortName(ModelInputParameters, "Biomass1"), 
-		 GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "Biomass1"));
-  upar.SetLimits("Biomass2", GetParameterLowerLimitAccordingToShortName(ModelInputParameters, "Biomass2"), 
-		 GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "Biomass2"));
-  upar.SetLimits("vm_mean", GetParameterLowerLimitAccordingToShortName(ModelInputParameters, "vm_mean"), 
-		 GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "vm_mean"));
-  upar.SetLimits("vm_sigma", GetParameterLowerLimitAccordingToShortName(ModelInputParameters, "vm_sigma"), 
-		 GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "vm_sigma"));
+  // Assert parameters domain
+  upar.SetLimits("Targeted q", 0, 1e2);
+  upar.SetLimits("Nontargeted q", 0, 1e2);
+  upar.SetLimits("sigma", 0, 1e2);
+  upar.SetLimits("Biomass1", 0, 1e3);
+  upar.SetLimits("Biomass2", 0, 1e3);
+  upar.SetLimits("vm_mean", -10, 10);
+  upar.SetLimits("vm_sigma", 1e-3, 80);
 
   for(unsigned int i = 1; i <= counter/NIPY; ++i){
-    //upar.SetLimits(RecVarName + " " + std::to_string(i), 1e-2, 1e2);
-    upar.SetLimits(RecVarName + " " + std::to_string(i), 
-		   GetParameterLowerLimitAccordingToShortName(ModelInputParameters, RecVarName + " " + std::to_string(i)),
-		   GetParameterUpperLimitAccordingToShortName(ModelInputParameters, RecVarName + " " + std::to_string(i)));	
-
+    upar.SetLimits(RecVarName + " " + std::to_string(i), 1e-4, 1e2);
   }
 
-  cout << "The number of variables estimated by Minuit will be " << upar.Params().size() << "\n";
+  cout << "The number of variable is " << upar.Params().size() << "\n";
 
   // create MIGRAD minimizer with MnStrategy 0 (strategy to calculate first and second derivative with fewer function calls -- less precise result)
   MnMigrad migrad(fFCN, upar, 0);
 
-  // Fix some parameters to start with
+  // Fix a parameter
   migrad.Fix("Targeted q");
   migrad.Fix("Nontargeted q");
   migrad.Fix("sigma");
@@ -152,8 +135,7 @@ int main( int argc, char *argv[]) {
 
   // output
   std::cout<<"minimum: "<< min << std::endl;
-
-  // Release fixed parameters in the second round of optimization 
+  
   migrad.Release("Targeted q");
   migrad.Release("Nontargeted q");
   migrad.Release("sigma");
@@ -161,11 +143,9 @@ int main( int argc, char *argv[]) {
   FunctionMinimum min2 = migrad();
   std::cout<<"minimum2: "<< min2 << std::endl;
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // output results to file
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  std::vector<Parameter> ModelOutputParameters=ModelInputParameters;
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   ofstream FitFile;
   FitFile.open ("Results/FitOutcome.txt");
@@ -174,16 +154,9 @@ int main( int argc, char *argv[]) {
 
   ofstream FitParamFile;
   FitParamFile.open ("Results/ParameterEstimates.txt");
-  for(unsigned int i = 0; i < upar.Params().size(); ++i){
-    SetParameterValueAccordingToShortName(ModelOutputParameters, upar.Name(i), min2.UserState().Value(i));
-    SetParameterUncertaintyAccordingToShortName(ModelOutputParameters, upar.Name(i),min2.UserState().Error(i));
-    
+  for(unsigned int i = 0; i < upar.Params().size(); ++i)
     FitParamFile << upar.Name(i) << "," << min2.UserState().Value(i) << "," << min2.UserState().Error(i) << "\n";
-  }
   FitParamFile.close();
-
-  // Write parameters to csv file
-  WriteParameterToCSV("Results/DelayDifferenceModelParameters.csv", ModelOutputParameters);
 
   // Output estimates of fisheries quantities: fishing mortality, catch and biomass 
 

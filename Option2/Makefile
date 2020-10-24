@@ -1,5 +1,5 @@
-# CREATED  23 April 2014
-# MODIFIED 26 July  2016
+# CREATED  23 Apr 2014
+# MODIFIED 24 Oct 2020
 
 # AUTHOR Marco.Kienzle@gmail.com
 
@@ -14,18 +14,15 @@
 
 # Compile using static libraries for 64bit machine
 # CFLAGS = -m32 -g -O2 -Wall -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2 # with lots of warning
-#CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2
+#CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -static -lMinuit2 # 24-Oct-2020: static link returns an error. I read it was a by idea to statically link. 
+CFLAGS = -fopenmp -std=c++0x -O2 -I/usr/include -L/usr/local/lib -lMinuit2
 
-CFLAGS = $(shell root-config --cflags) 
-#CFLAGS = -pthread -std=c++11 -Wno-deprecated-declarations -m64 -I/usr/local/include
-LIBS = $(shell root-config --glibs) -lMinuit2
-
-############################################################################################################################################
+##############################################################################################################################################################
 ### 1. A program to fit the delay difference model to data and estimate parameters
-############################################################################################################################################
+##############################################################################################################################################################
 
 DelayDifference_Option2: FitDelayDifference.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o
-			g++ $(CFLAGS) -o DelayDifference_Option2 /usr/lib/prob.o FitDelayDifference.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o $(LIBS)
+			g++ -o DelayDifference_Option2 /usr/lib/prob.o FitDelayDifference.o LogLikelihoodFunction.o DelayDifference.o UsefulFunctions.o $(CFLAGS)
 
 UsefulFunctions.o: ../lib_facilities.h ../UsefulFunctions.h ../UsefulFunctions.cpp
 			g++ $(CFLAGS) -c ../UsefulFunctions.cpp
@@ -42,9 +39,9 @@ DelayDifference.o: DelayDifference.cpp
 FitDelayDifference.o: FitDelayDifference.cpp DelayDifference.h LogLikelihoodFunction.h
 	g++ $(CFLAGS) -c FitDelayDifference.cpp
 
-############################################################################################################################################
+##############################################################################################################################################################
 ### 2. A program to simulate a fishery with the delay difference model based on parameters estimated for this model 
-############################################################################################################################################
+##############################################################################################################################################################
 
 DD_Option2Projections: /usr/lib/prob.o DDprojections.o Projections.o UsefulFunctions.o
 			g++ -std=c++0x -g -o DD_Option2Projections -I/usr/include /usr/lib/prob.o DDprojections.o Projections.o UsefulFunctions.o
@@ -55,24 +52,24 @@ DDprojections.o: DDprojections.cpp
 Projections.o: Projections.cxx
 			g++ $(CFLAGS) -c Projections.cxx
 
-############################################################################################################################################
+##############################################################################################################################################################
 ### make all
-############################################################################################################################################
+##############################################################################################################################################################
 
 all: DelayDifference_Option2 DD_Option2Projections
 
-############################################################################################################################################
+##############################################################################################################################################################
 ### make clean
-############################################################################################################################################
+##############################################################################################################################################################
 
 clean:
 	rm -f *.o DelayDifference_Option2 DDprojections_Option2Projections
 
-############################################################################################################################################
+##############################################################################################################################################################
 ### make test
-############################################################################################################################################
+##############################################################################################################################################################
 
-testDelayDifference:
-	./DelayDifference_Option2 Data/SimData4.txt InputParameterDescription.csv
-	#diff Results/FitOutcome.txt Results/FitOutcome-1Apr2016.txt
-	diff Results/ParameterEstimates.txt Results/ParameterEstimates-2016Apr05.txt
+test:
+	./DelayDifference_Option2 Data/SimData4.txt > /tmp/output
+	tail --lines=+3 /tmp/output > /tmp/file1; tail --lines=+3 Results/v0.1.output > /tmp/file2
+	diff /tmp/file1 /tmp/file2 # header differ by the version number
