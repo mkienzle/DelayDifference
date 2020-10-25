@@ -1,5 +1,5 @@
 // CREATED  10 Sep 2013
-// MODIFIED 14 Oct 2014
+// MODIFIED 25 Oct 2020
 
 // VERSION 0.3
 
@@ -10,11 +10,16 @@
 // PURPOSE fit a delay difference model (with weekly time-steps) to a series of catch and effort data
 //         by maximum likelihood
 
-// USAGE DelayDifference_Option3 Data/SimData4.txt FixParameters.txt
+// USAGE    DelayDifference_Option3 Data/SimData4.txt FixParameters.txt
+// OPTIONAL DelayDifference_Option3 Data/SimData4.txt FixParameters.txt --ZeroBiomassAtWeek 42
 
-// ARGUMENT the path to a file containing formatted data into 7 columns format containing: (1) timestep (2) label for the type of year used (3) numeric value of year (4) numeric value for week (5) catch (6) targeted and (7) un-targeted effort data from file
+// ARGUMENTS
+// First argument: path to a file containing formatted data into 7 columns format containing: (1) timestep (2) label for the type of year used (3) numeric value of year (4) numeric value for week (5) catch (6) targeted and (7) un-targeted effort data from file
+// Second argument: path to a file containing values of FixParameters
+// Third (optional argument): a number of week in the fishing year at which the biomass will be set to zero (to represent senescence, total mortality after spawning)
 
 // DATA an example of input data format is shown SimulatePopDynamic.R Test the code 
+
 
 // COMPILE make
 
@@ -34,11 +39,12 @@ using namespace ROOT::Minuit2;
 double rho, wk, wk_1; //, M;
 double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
 int NIPY;
+int EndOfSpawningWeekNumber = 0;
 
 int main( int argc, char *argv[]) {
 
   // Print a starting message
-  banner("0.1, option 3", "2014-07-16");
+  banner("0.1, option 3", "2020-10-25");
 
   //if ( argc != 2) {// argc should be 2 for correct execution
   //  cout << "usage: " << argv[0] << " <filename>\n";
@@ -51,6 +57,21 @@ int main( int argc, char *argv[]) {
   // works well on real data
   //std::ifstream ifs( "Data/TigerWeeklyData1989-2010");
 
+
+  // Grab the ZeroBiomassAtWeek number if passed as an argument
+    std::string WeekNumber_strg;
+
+    for (int i = 1; i < argc; ++i) {
+        if (std::string(argv[i]) == "--ZeroBiomassAtWeek") {
+	  if ((i + 1) < argc) { // Make sure we aren't at the end of argv!
+                WeekNumber_strg = argv[i+1]; // Increment 'i' so we don't get the argument as the next argv[i].
+		EndOfSpawningWeekNumber = stoi(WeekNumber_strg);
+
+            }             
+        }
+    }
+    
+    
   std::vector< double > timestep, Year, Week, FishCatch, Targeted_Effort, Nontargeted_Effort;
   std::vector<string> YearType;
   double a, c, d, e, f, g;

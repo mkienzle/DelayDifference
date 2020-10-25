@@ -1,5 +1,5 @@
 // CREATED   10 Sept 2013
-// MODIFIED  20 May 2014
+// MODIFIED  25 Oct 2020
 
 // Copyright (c) 2013, 2014 Queensland Government, Department of Agriculture, Forestry, and Fisheries
 // Programmed by Marco Kienzle
@@ -24,7 +24,7 @@ std::vector<double> vonMisesRecDist(double a, double b);
 void WeeklyDD(const std::vector<double> &TargetedEffort, const std::vector<double> &NontargetedEffort,  std::vector<double> &Biomass, const std::vector<double> &par){
 
   // Global variables
-  extern int NIPY;
+  extern int NIPY, EndOfSpawningWeekNumber;
   extern double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
   extern double rho, wk, wk_1;//, M;
 
@@ -70,10 +70,18 @@ void WeeklyDD(const std::vector<double> &TargetedEffort, const std::vector<doubl
   // Recursive calculation of biomass
   for(unsigned int counter = 2; counter < max_timestep; counter++){
 
+    // set biomass to zero every year in week 43 (1st of August) to
+    // represent all squid die after spawning (senescence), spawning season assumed to be June--July
+    // 52 allowed for convergence
+    if(EndOfSpawningWeekNumber != 0) {
+      if( (counter % EndOfSpawningWeekNumber) == 2) {Biomass[counter-2] = 0; Biomass[counter-1] = 0;}
+    }
     // calculate biomass
     Biomass[counter] = survival[counter-1] * Biomass[counter-1] + rho * survival[counter-1] * Biomass[counter-1] - rho * survival[counter-1] *survival[counter -2] * Biomass[counter-2] - rho * survival[counter-1] * wk_1 *  Rec[counter-1] + wk * Rec[counter]; 
 
-    if(Biomass[counter] < 0){Biomass[counter] = 0;} 
+    if(Biomass[counter] < 0){Biomass[counter] = 0;}
+
+    
   }
 }
 
