@@ -74,16 +74,37 @@ void WeeklyDD(const std::vector<double> &TargetedEffort, const std::vector<doubl
     // represent all squid die after spawning (senescence), spawning season assumed to be June--July
     // 52 allowed for convergence
     if(EndOfSpawningWeekNumber != 0) {
-      if( (counter % EndOfSpawningWeekNumber) == 2) {Biomass[counter-2] = 0; Biomass[counter-1] = 0;}
-    }
+      //      if( (counter % EndOfSpawningWeekNumber) == 0) {Biomass[counter-2] = 0; Biomass[counter-1] = 0;}
+      // Remember that vector indices start at 0 in C++
+      if( (counter % (EndOfSpawningWeekNumber - 1)) == 0) {
+
+	////////////////////////////////////////////////////////////////
+	// Calculate biomass assuming senescence (previous biomass died)
+	////////////////////////////////////////////////////////////////
+	
+	// The biomass in the week after the end of spawning is only given by the recruitment
+	Biomass[counter] = wk * Rec[counter]; } else {
+
+	// The biomass 2 weeks after the end of spawning is given by recruitment + biomass in the previous week (i.e. the week after spawning)
+	if(counter % (EndOfSpawningWeekNumber - 1) == 1) {
+	Biomass[counter] = survival[counter - 1] * (wk - rho * wk_1) * Biomass[counter - 1] / wk + rho * survival[counter-1] * Biomass[counter-1] + wk * Rec[counter];}
+      
+      else {
+
+	      
+      Biomass[counter] = survival[counter-1] * Biomass[counter-1] + rho * survival[counter-1] * Biomass[counter-1] - rho * survival[counter-1] *survival[counter -2] * Biomass[counter-2] - rho * survival[counter-1] * wk_1 *  Rec[counter-1] + wk * Rec[counter]; }
+	    
+      }}
+     else {
     // calculate biomass
-    Biomass[counter] = survival[counter-1] * Biomass[counter-1] + rho * survival[counter-1] * Biomass[counter-1] - rho * survival[counter-1] *survival[counter -2] * Biomass[counter-2] - rho * survival[counter-1] * wk_1 *  Rec[counter-1] + wk * Rec[counter]; 
+       Biomass[counter] = survival[counter-1] * Biomass[counter-1] + rho * survival[counter-1] * Biomass[counter-1] - rho * survival[counter-1] *survival[counter -2] * Biomass[counter-2] - rho * survival[counter-1] * wk_1 *  Rec[counter-1] + wk * Rec[counter]; }
 
     if(Biomass[counter] < 0){Biomass[counter] = 0;}
-
+    
+  } // End of the for loop
     
   }
-}
+  
 
 ///// Licensing agreement
 //    This program is free software: you can redistribute it and/or modify
