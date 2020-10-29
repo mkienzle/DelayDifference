@@ -1,5 +1,5 @@
 // CREATED  29 April 2014
-// MODIFIED 21 July  2014
+// MODIFIED 31 Aug 2017
 
 // AUTHOR Marco.Kienzle@gmail.com
 
@@ -10,21 +10,23 @@
 #include <fstream>
 #include <string>
 #include "lib_facilities.h"
+#include "UsefulClasses.h"
 #include <boost/algorithm/string.hpp>
 
+
 // Output info about the delay difference
-void banner(string version_nb, string version_date)
+void banner(std::string version_nb, std::string version_date)
 {
 
   // Print a starting message
   std::cout << "\"Down under\" delay difference model version " << version_nb << " (" << version_date << ")\n";
-  std::cout << "Copyright (C) 2013-15 Queensland Government, Department of Agriculture, Forestry and Fisheries\n";
+  std::cout << "Copyright (C) 2013-17 Queensland Government, Department of Agriculture and Fisheries\n";
   std::cout << "This code is distributed under the GNU GPL v.3 license (http://www.gnu.org/licenses/)\n\n";
 
 }
 
 // Display file content
-void display_file(string& filename)
+void display_file(std::string& filename)
 {
   string line;
   unsigned int line_number=0;
@@ -36,21 +38,314 @@ void display_file(string& filename)
     while(!ist.eof()){
       line_number++;
       getline(ist,line);
-      cout << "Line " << line_number << ": " << line << endl;
+      if(line.length() > 0){
+	cout << "Line " << line_number << ": " << line << endl;
       
       if(boost::find_first(line, "Natural mortality")){
 	cout << "The line below contains the parameter you want" << endl;
       }
+    }
 
     }
     cout << "bye\n";
     // the file is implicitly closed when we leave the function
 }
 
+//
+// Get input parameters to the delay difference from descriptions in a CSV file
+//
+
+std::vector<Parameter> ReadParameterDescription(const std::string& filename)
+{
+
+  // file variable 
+  std::string line;  // store lines in file
+  std::vector<int> N; // Number of elements per line
+  unsigned int line_number=0; // counter
+
+  // Container for the parameters information in the file
+  std::vector<Parameter> ParameterVector;
+
+  // Open file for reading
+  ifstream file(filename.c_str());    // open file for reading
+  if (!file) error("can't open input file ",filename);
+
+  // Read lines from file
+  while(getline(file,line)){
+
+    if(line.length() > 0){
+      line_number++; // count the number of lines
+
+      // Read lines content into a vector
+      std::istringstream iss(line);
+      std::string token;
+      std::vector<std::string> tokens;
+    
+      while(std::getline(iss, token, ','))
+	tokens.push_back(token);
+
+      // How many element were read from each line 
+      N.push_back(tokens.size());
+
+      if(line_number == 1) {} // skip the headerdo nothing with the file header
+    
+      else{
+    
+	Parameter SingleParameter;
+
+	// Assign entries in each line to a variable of type Parameter
+	SingleParameter.LongName = tokens[0];
+	SingleParameter.ShortName = tokens[1];
+	SingleParameter.Symbol = tokens[2];
+	SingleParameter.Type = tokens[3];
+	SingleParameter.Value = atof(tokens[4].c_str());
+	SingleParameter.Boundaries[0] = atof(tokens[5].c_str()); // NA converted in 0.0
+	SingleParameter.Boundaries[1] = atof(tokens[6].c_str()); // NA converted in 0.0
+	SingleParameter.Unit = tokens[7];
+
+	ParameterVector.push_back(SingleParameter); // Add parameter to the vector of parameters
+
+      } // End of else
+    } // End of if(line.length() > 0
+  } // End of while
+
+  file.close();
+
+  // Check that all lines contains the same number of elements separated by commas
+  if (std::adjacent_find(N.begin(), N.end(), std::not_equal_to<int>() ) != N.end() )
+    error("Inconsistent number of elements separated by commas in ",filename);
+  
+  // End of function execution message
+  //std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
+ 
+  return ParameterVector;
+}
+
+//
+// Get parameters output by the delay difference into a CSV file
+//
+
+std::vector<Parameter> ReadOutputParameterDescription(const std::string& filename)
+{
+
+  // file variable 
+  std::string line;  // store lines in file
+  std::vector<int> N; // Number of elements per line
+  unsigned int line_number=0; // counter
+
+  // Container for the parameters information in the file
+  std::vector<Parameter> ParameterVector;
+
+  // Open file for reading
+  ifstream file(filename.c_str());    // open file for reading
+  if (!file) error("can't open input file ",filename);
+
+  // Read lines from file
+  while(getline(file,line)){
+
+    if(line.length() > 0){
+      line_number++; // count the number of lines
+
+      // Read lines content into a vector
+      std::istringstream iss(line);
+      std::string token;
+      std::vector<std::string> tokens;
+    
+      while(std::getline(iss, token, ','))
+	tokens.push_back(token);
+
+      // How many element were read from each line 
+      N.push_back(tokens.size());
+
+      if(line_number == 1) {} // skip the headerdo nothing with the file header
+    
+      else{
+    
+	Parameter SingleParameter;
+
+	// Assign entries in each line to a variable of type Parameter
+	SingleParameter.LongName = tokens[0];
+	SingleParameter.ShortName = tokens[1];
+	SingleParameter.Symbol = tokens[2];
+	SingleParameter.Type = tokens[3];
+	SingleParameter.Value = atof(tokens[4].c_str());
+	SingleParameter.Uncertainty = atof(tokens[5].c_str()); // NA converted in 0.0
+	SingleParameter.Unit = tokens[6];
+
+	ParameterVector.push_back(SingleParameter); // Add parameter to the vector of parameters
+
+      } // End of else
+    } // End of if(line.length() > 0
+  } // End of while
+
+  file.close();
+
+  // Check that all lines contains the same number of elements separated by commas
+  if (std::adjacent_find(N.begin(), N.end(), std::not_equal_to<int>() ) != N.end() )
+    error("Inconsistent number of elements separated by commas in ",filename);
+  
+  // End of function execution message
+  //std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
+ 
+  return ParameterVector;
+}
+
+//
+// Write estimated and fixed parameters to the delay difference to a CSV file
+//
+
+void WriteParameterToCSV(const std::string& filename, std::vector<Parameter> ParameterVector)
+{
+
+  // file variable 
+  //std::string line;  // store lines in file
+  //std::vector<int> N; // Number of elements per line
+  //unsigned int line_number=0; // counter
+
+  // Container for the parameters information in the file
+  //std::vector<Parameter> ParameterVector;
+
+  // Open file for reading
+  ofstream file(filename.c_str());    // open file for reading
+  if (!file) error("can't open input file ",filename);
+
+  // Write a header
+  file << "LongName,ShortName,Symbol,Type,Value,Uncertainty,Unit\n";
+
+  // Write the data
+  for(unsigned int i=0; i < ParameterVector.size(); i++)
+    {
+      file << ParameterVector[i].LongName + "," 
+	+ ParameterVector[i].ShortName + ","
+	+ ParameterVector[i].Symbol + ","
+	+ ParameterVector[i].Type + ","
+	   << ParameterVector[i].Value << ","
+	   << ParameterVector[i].Uncertainty << ","
+	+ ParameterVector[i].Unit + "\n";
+    }
+
+  file.close();
+}
+
+// Get parameter value given its symbol
+double GetParameterValueAccordingToSymbol(const std::vector<Parameter> &ParVector, const std::string &Symbol){
+
+    for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].Symbol.compare(Symbol) == 0) 
+	{
+	  return ParVector[i].Value;
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetParameterValueAccordingToSymbol(): no value found for parameter " + Symbol + " in input parameter file.");
+    
+}
+
+// Get parameter lower limit given its symbol
+double GetParameterLowerLimitAccordingToSymbol(const std::vector<Parameter> &ParVector, const std::string &Symbol){
+
+    for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].Symbol.compare(Symbol) == 0) 
+	{
+	  return ParVector[i].Boundaries[0];
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetParameterLowerLimitAccordingToSymbol(): no value found for parameter " + Symbol + " in input parameter file.");
+}
+
+// Get parameter upper limit given its symbol
+double GetParameterUpperLimitAccordingToSymbol(const std::vector<Parameter> &ParVector, const std::string &Symbol){
+
+    for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].Symbol.compare(Symbol) == 0) 
+	{
+	  return ParVector[i].Boundaries[1];
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetParameterUpperLimitAccordingToSymbol(): no value found for parameter " + Symbol + " in input parameter file.");
+}
+
+// Get parameter value given its short name
+double GetParameterValueAccordingToShortName(const std::vector<Parameter> &ParVector, const std::string &ShortName){
+
+    for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].ShortName.compare(ShortName) == 0) 
+	{
+	  return ParVector[i].Value;
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetParameterValueAccordingToShortName(): no value found for parameter " + ShortName + " in input parameter file.");
+    
+}
+
+// Get parameter lower limit given its short name
+double GetParameterLowerLimitAccordingToShortName(const std::vector<Parameter> &ParVector, const std::string &ShortName){
+
+    for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].ShortName.compare(ShortName) == 0) 
+	{
+	  return ParVector[i].Boundaries[0];
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetParameterLowerLimitAccordingToShortName(): no value found for parameter " + ShortName + " in input parameter file.");
+    
+}
+
+// Get parameter upper limit given its short name
+double GetParameterUpperLimitAccordingToShortName(const std::vector<Parameter> &ParVector, const std::string &ShortName){
+
+    for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].ShortName.compare(ShortName) == 0) 
+	{
+	  return ParVector[i].Boundaries[1];
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetParameterUpperLimitAccordingToShortName(): no value found for parameter " + ShortName + " in input parameter file.");
+    
+}
+
+//
+// Set parameter value given its symbol
+//
+
+void SetParameterValueAccordingToShortName(std::vector<Parameter> &ParVector, const std::string &ShortName, double Value){
+
+    for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].ShortName.compare(ShortName) == 0) 
+	{
+	  ParVector[i].Value = Value;
+	}
+      }
+}
+
+// Set parameter uncertainty given its symbol
+void SetParameterUncertaintyAccordingToShortName(std::vector<Parameter> &ParVector, const std::string &ShortName, double Uncertainty){
+
+  for(unsigned int i = 0; i < ParVector.size(); ++i)
+      {
+	if( ParVector[i].ShortName.compare(ShortName) == 0) 
+	{
+	  ParVector[i].Uncertainty = Uncertainty;
+	}
+      }
+}
+
 // 
 // Get the value of a variable from filename given a VariableDescription
 //
-double fill_from_file(string& filename, const string VariableDescription)
+double fill_from_file(std::string& filename, const std::string VariableDescription)
 {
   string line;
   unsigned int line_number=0;
@@ -92,10 +387,10 @@ double fill_from_file(string& filename, const string VariableDescription)
 // INPUT a is allowed to vary between -Inf and Inf
 //       b must be positive
 
-std::vector<double> vonMisesRecDist(double a, double b){
+std::vector<double> vonMisesRecDist(double a, double b, const int& NIPY){
 
 // Global variables
-extern int NIPY;
+//extern int NIPY;
 
 
   //  cout << "\n";
@@ -167,13 +462,13 @@ extern int NIPY;
 }
 
       // sometimes small negative probability appears 
-      if(intervals[i] < 0.0)
+      if(intervals[i] < 0.0){
 	// if they are small, replace them by zero
 	if(abs(intervals[i]) < 1e-5){ intervals[i] = 0.0;}
-      // otherwise throw an error
-	else{
-	  throw;}
-
+        // otherwise throw an error
+	else{throw;}
+      }
+      
      total += intervals[i];
       	}
  
@@ -192,3 +487,137 @@ extern int NIPY;
 // Read data from a specific column in a file. Columns of data in this file are separated by space
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //std::vector<double> ReadData(std::string &filename, std::int ColNb){}
+
+//
+// Get information about projections's input files
+//
+
+std::vector<ProjectionInputFiles> ReadProjectionInputFileDescription(const std::string& filename)
+{
+
+  // file variable 
+  std::string line;  // store lines in file
+  std::vector<int> N; // Number of elements per line
+  unsigned int line_number=0; // counter
+
+  // Container for the parameters information in the file
+  std::vector<ProjectionInputFiles> ProjectionInputFilesVector;
+
+  // Open file for reading
+  ifstream file(filename.c_str());    // open file for reading
+  if (!file) error("can't open input file ",filename);
+
+  // Read lines from file
+  while(getline(file,line)){
+
+    if(line.length() > 0){
+      line_number++; // count the number of lines
+
+      // Read lines content into a vector
+      std::istringstream iss(line);
+      std::string token;
+      std::vector<std::string> tokens;
+    
+      while(std::getline(iss, token, ','))
+	tokens.push_back(token);
+
+      // How many element were read from each line 
+      N.push_back(tokens.size());
+
+      if(line_number == 1) {} // skip the headerdo nothing with the file header
+    
+      else{
+    
+	ProjectionInputFiles SingleLine;
+
+	// Assign entries in each line to a variable of type Parameter
+	SingleLine.LongName = tokens[0];
+	SingleLine.ShortName = tokens[1];
+	SingleLine.Path = tokens[2];
+
+	//std::cout << "Token[0] is " << tokens[0] << std::endl;
+	ProjectionInputFilesVector.push_back(SingleLine); // Add parameter to the vector of parameters
+
+      } // End of else
+    } // End of if(line.length() > 0
+  } // End of while
+
+  file.close();
+
+  // Check that all lines contains the same number of elements separated by commas
+  if (std::adjacent_find(N.begin(), N.end(), std::not_equal_to<int>() ) != N.end() )
+    error("Inconsistent number of elements separated by commas in ",filename);
+  
+  // End of function execution message
+  //std::cout << "Finished reading " << ParameterVector.size() << " parameters descriptions from file " << filename << "\n";
+ 
+  return ProjectionInputFilesVector;
+}
+
+// Get projection file path according to short name
+std::string GetProjectionFilePathAccordingToShortName(const std::vector<ProjectionInputFiles> &InputFileVector, const std::string &ShortName){
+
+    for(unsigned int i = 0; i < InputFileVector.size(); ++i)
+      {
+	if( InputFileVector[i].ShortName.compare(ShortName) == 0) 
+	{
+	  return InputFileVector[i].Path;
+	}
+      }
+    // 	Return an error if the parameter looked for was not found
+    error("Error in GetProjectionFilePathAccordingToShortName(): no value found for short name " + ShortName + " in input parameter file.");
+    
+}
+
+// A function to read a single raw of data in a file
+// applies to Stock Recruitment parameters, weekly effort pattern, weekly availability, weekly percentage of maturity
+std::vector<double> ReadParameterFromSingleColumnFile(const std::string& filename)
+{
+
+  // file variable 
+  std::string line;  // store lines in file
+  std::vector<int> N; // Number of elements per line
+  unsigned int line_number=0; // counter
+
+  // Container for the parameters information in the file
+  std::vector<double> ValueVector;
+
+  // Open file for reading
+  ifstream file(filename.c_str());    // open file for reading
+  if (!file) error("can't open input file ", filename);
+
+  // Read lines from file
+  while(getline(file,line)){
+
+    if(line.length() > 0){
+      line_number++; // count the number of lines
+
+      // Read lines content into a vector
+      std::istringstream iss(line);
+      std::string token;
+      std::vector<std::string> tokens;
+    
+      while(std::getline(iss, token, ','))
+	tokens.push_back(token);
+
+      // How many element were read from each line 
+      N.push_back(tokens.size());
+
+	ValueVector.push_back(atof(token.c_str())); // Add parameter to the vector of parameters
+
+    } // End of if(line.length() > 0
+
+  } // End of while
+
+  file.close();
+
+  // Check that all lines contains the same number of elements separated by commas
+  if(std::adjacent_find(N.begin(), N.end(), std::not_equal_to<int>() ) != N.end() )
+    error("Inconsistent number of elements separated by commas in ",filename);
+
+  // End of function execution message
+  //std::cout << "Finished reading " << ValueVector.size() << " parameters descriptions from file " << filename << "\n";
+
+  return ValueVector;
+}
+
