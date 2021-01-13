@@ -1,5 +1,5 @@
-// CREATED  29 April 2014
-// MODIFIED 31 Aug 2017
+// CREATED  29 Apr 2014
+// MODIFIED 18 Nov 2020
 
 // AUTHOR Marco.Kienzle@gmail.com
 
@@ -239,7 +239,7 @@ double GetParameterValueAccordingToSymbol(const std::vector<Parameter> &ParVecto
       }
     // 	Return an error if the parameter looked for was not found
     error("Error in GetParameterValueAccordingToSymbol(): no value found for parameter " + Symbol + " in input parameter file.");
-    
+    return 1;
 }
 
 // Get parameter lower limit given its symbol
@@ -254,6 +254,7 @@ double GetParameterLowerLimitAccordingToSymbol(const std::vector<Parameter> &Par
       }
     // 	Return an error if the parameter looked for was not found
     error("Error in GetParameterLowerLimitAccordingToSymbol(): no value found for parameter " + Symbol + " in input parameter file.");
+    return 1;
 }
 
 // Get parameter upper limit given its symbol
@@ -268,6 +269,7 @@ double GetParameterUpperLimitAccordingToSymbol(const std::vector<Parameter> &Par
       }
     // 	Return an error if the parameter looked for was not found
     error("Error in GetParameterUpperLimitAccordingToSymbol(): no value found for parameter " + Symbol + " in input parameter file.");
+    return 1;
 }
 
 // Get parameter value given its short name
@@ -282,7 +284,7 @@ double GetParameterValueAccordingToShortName(const std::vector<Parameter> &ParVe
       }
     // 	Return an error if the parameter looked for was not found
     error("Error in GetParameterValueAccordingToShortName(): no value found for parameter " + ShortName + " in input parameter file.");
-    
+    return 1;
 }
 
 // Get parameter lower limit given its short name
@@ -297,7 +299,7 @@ double GetParameterLowerLimitAccordingToShortName(const std::vector<Parameter> &
       }
     // 	Return an error if the parameter looked for was not found
     error("Error in GetParameterLowerLimitAccordingToShortName(): no value found for parameter " + ShortName + " in input parameter file.");
-    
+    return 1;
 }
 
 // Get parameter upper limit given its short name
@@ -312,7 +314,7 @@ double GetParameterUpperLimitAccordingToShortName(const std::vector<Parameter> &
       }
     // 	Return an error if the parameter looked for was not found
     error("Error in GetParameterUpperLimitAccordingToShortName(): no value found for parameter " + ShortName + " in input parameter file.");
-    
+    return 1;
 }
 
 //
@@ -566,7 +568,7 @@ std::string GetProjectionFilePathAccordingToShortName(const std::vector<Projecti
       }
     // 	Return an error if the parameter looked for was not found
     error("Error in GetProjectionFilePathAccordingToShortName(): no value found for short name " + ShortName + " in input parameter file.");
-    
+    return "failed";
 }
 
 // A function to read a single raw of data in a file

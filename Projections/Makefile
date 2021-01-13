@@ -1,5 +1,5 @@
 # CREATED  25 Aug 2017
-# MODIFIED  4 Sep 2017
+# MODIFIED 18 Nov 2020
 
 # AUTHOR Marco.Kienzle@gmail.com
 
@@ -22,6 +22,8 @@ MDPprojectionType1: DelayDifferenceModel.o DelayDifferenceModelProjection.o Usef
 Tutorial: DelayDifferenceModel.o DelayDifferenceModelProjection.o UsefulFunctions.o Tutorial.cpp 
 			g++ $(CFLAGS) -o Tutorial Tutorial.cpp /usr/lib/prob.o DelayDifferenceModel.o DelayDifferenceModelProjection.o UsefulFunctions.o $(LIBS)
 
+Squid_150YearsProjectionWithEffort: DelayDifferenceModel.o DelayDifferenceModelProjection.o UsefulFunctions.o Squid_150YearsProjectionWithEffort.cpp
+			g++ $(CFLAGS) -o Squid_150YearsProjectionWithEffort Squid_150YearsProjectionWithEffort.cpp /usr/lib/prob.o DelayDifferenceModel.o DelayDifferenceModelProjection.o UsefulFunctions.o $(LIBS)
 UsefulFunctions.o: ../lib_facilities2.h ../UsefulFunctions.h ../UsefulFunctions.cpp
 			g++ $(CFLAGS) -c ../UsefulFunctions.cpp
 
@@ -34,7 +36,7 @@ DelayDifferenceModelProjection.o: DelayDifferenceModelProjection.h DelayDifferen
 #############################################################################################################################################
 ### make all
 #############################################################################################################################################
-all: 50YearsProjectionsWithEffortBetween MDPprojectionType1 Tutorial 
+all: 50YearsProjectionsWithEffortBetween MDPprojectionType1 Tutorial Squid_150YearsProjectionWithEffort
 #all: 50YearsProjectionsWithEffortBetween 50YearsProjectionsForMAY MDPprojectionType1 Tutorial 
 #all: DelayDifference_Option3 DD_Option3Projections DD_Option3Projections_forMDP DD_Option3Projections_forMDPNumber2 DD_Option3Projections_fortest DD_Option3Projections_forMDPWithEffortLimits
 

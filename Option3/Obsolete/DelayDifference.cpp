@@ -1,7 +1,7 @@
 // CREATED   10 Sept 2013
-// MODIFIED  13 Jan 2021
+// MODIFIED  25 Aug 2017
 
-// Copyright (c) 2013, 2014 Queensland Government, Department of Agriculture, Forestry, and Fisheries
+// Copyright (c) 2013, 2017 Queensland Government, Department of Agriculture, Forestry, and Fisheries
 // Programmed by Marco Kienzle
 // This code is distributed under the GNU GPL v.3 license (see at the bottom for more info)
 
@@ -11,8 +11,8 @@
 # include <vector>
 # include <iostream>
 # include <cassert>
-
 # include "../UsefulFunctions.h"
+
 //std::vector<double> vonMisesRecDist(double a, double b);
 
 // STATUS working, converging to the simulated parameters
@@ -25,7 +25,7 @@
 void WeeklyDD(const std::vector<double> &TargetedEffort, const std::vector<double> &NontargetedEffort,  std::vector<double> &Biomass, const std::vector<double> &par){
 
   // Global variables
-  extern int NIPY, EndOfSpawningWeekNumber;
+  extern int NIPY;
   extern double CatchabilityScalingFactor, BiomassScalingFactor,RecruitmentScalingFactor;
   extern double rho, wk, wk_1;//, M;
 
@@ -56,7 +56,7 @@ void WeeklyDD(const std::vector<double> &TargetedEffort, const std::vector<doubl
 
   // Calculate the proportion of recruitment in each week 
   std::vector<double> RecDist(NIPY, 0.0);
-  RecDist = vonMisesRecDist(vm_mean, vm_sigma, NIPY);
+  RecDist = vonMisesRecDist(vm_mean, vm_sigma,NIPY);
   
   // Create the vector of recruitment
     for(unsigned int counter = 0; counter < max_timestep; counter++){
@@ -71,41 +71,12 @@ void WeeklyDD(const std::vector<double> &TargetedEffort, const std::vector<doubl
   // Recursive calculation of biomass
   for(unsigned int counter = 2; counter < max_timestep; counter++){
 
-    // set biomass to zero every year in week 43 (1st of August) to
-    // represent all squid die after spawning (senescence), spawning season assumed to be June--July
-    // 52 allowed for convergence
-    if(EndOfSpawningWeekNumber != 0) {
-      //      if( (counter % EndOfSpawningWeekNumber) == 0) {Biomass[counter-2] = 0; Biomass[counter-1] = 0;}
-      // Remember that vector indices start at 0 in C++
-      if( (counter % (EndOfSpawningWeekNumber - 1)) == 0) {
-
-	////////////////////////////////////////////////////////////////
-	// Calculate biomass assuming senescence (previous biomass died)
-	////////////////////////////////////////////////////////////////
-	
-	// The biomass in the week after the end of spawning is only given by the recruitment
-	Biomass[counter] = wk * Rec[counter]; } else {
-
-	// The biomass 2 weeks after the end of spawning is given by recruitment + biomass in the previous week (i.e. the week after spawning)
-	if(counter % (EndOfSpawningWeekNumber - 1) == 1) {
-	Biomass[counter] = survival[counter - 1] * (wk - rho * wk_1) * Biomass[counter - 1] / wk + rho * survival[counter-1] * Biomass[counter-1] + wk * Rec[counter];}
-      
-      else {
-
-	      
-      Biomass[counter] = survival[counter-1] * Biomass[counter-1] + rho * survival[counter-1] * Biomass[counter-1] - rho * survival[counter-1] *survival[counter -2] * Biomass[counter-2] - rho * survival[counter-1] * wk_1 *  Rec[counter-1] + wk * Rec[counter]; }
-	    
-      }}
-     else {
     // calculate biomass
-       Biomass[counter] = survival[counter-1] * Biomass[counter-1] + rho * survival[counter-1] * Biomass[counter-1] - rho * survival[counter-1] *survival[counter -2] * Biomass[counter-2] - rho * survival[counter-1] * wk_1 *  Rec[counter-1] + wk * Rec[counter]; }
+    Biomass[counter] = survival[counter-1] * Biomass[counter-1] + rho * survival[counter-1] * Biomass[counter-1] - rho * survival[counter-1] *survival[counter -2] * Biomass[counter-2] - rho * survival[counter-1] * wk_1 *  Rec[counter-1] + wk * Rec[counter]; 
 
-    if(Biomass[counter] < 0){Biomass[counter] = 0;}
-    
-  } // End of the for loop
-    
+    if(Biomass[counter] < 0){Biomass[counter] = 0;} 
   }
-  
+}
 
 ///// Licensing agreement
 //    This program is free software: you can redistribute it and/or modify

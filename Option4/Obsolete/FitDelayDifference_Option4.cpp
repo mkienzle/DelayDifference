@@ -1,5 +1,5 @@
 // CREATED  10 Sep 2013
-// MODIFIED  4 Nov 2020
+// MODIFIED 28 Apr 2016
 
 // VERSION 0.1
 
@@ -188,7 +188,7 @@ GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "vm_sigma"));
   }
 
   // Minimize
-  FunctionMinimum min = migrad(20000);
+  FunctionMinimum min = migrad();
 
   // output
   std::cout<<"minimum: "<< min << std::endl;
@@ -202,7 +202,7 @@ GetParameterUpperLimitAccordingToShortName(ModelInputParameters, "vm_sigma"));
        migrad.Release((RdistVarName + " " + std::to_string(i)).c_str());
   }
 
-     FunctionMinimum min2 = migrad(20000); // setting the maximum number of calls to 20 000
+  FunctionMinimum min2 = migrad();
   std::cout<<"minimum2: "<< min2 << std::endl;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  // output results to file

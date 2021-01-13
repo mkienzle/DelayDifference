@@ -14,6 +14,7 @@
 #include <sstream>
 #include <chrono>
 #include <cassert>
+#include <random>
 
 // Constructor
 DelayDifferenceModelProjection::DelayDifferenceModelProjection(std::string filename)
@@ -213,9 +214,10 @@ void DelayDifferenceModelProjection::Project()
       double RandNumber = distribution(generator);
       //std::cout << "Random N(0,0.4) realisation is " << RandNumber << " and log(10) = " << log(10) << std::endl;
 
+      //std::cout << "TotalSSB is " << TotalSSB << std::endl;
       // Random recruitment
-      //double PredRec = exp(SRR.par[0] + SRR.par[1] * TotalSSB + RandNumber) * TotalSSB; // Ricker SRR
-      double PredRec = exp(SRR.par[0] - log(SRR.par[1] + TotalSSB) + RandNumber) * TotalSSB; // Beverton-Holt SRR
+      double PredRec = exp(SRR.par[0] + SRR.par[1] * TotalSSB + RandNumber) * TotalSSB; // Ricker SRR
+      //double PredRec = exp(SRR.par[0] - log(SRR.par[1] + TotalSSB) + RandNumber) * TotalSSB; // Beverton-Holt SRR
       YearlyRec[counter / 52] = PredRec;
       
       // Deterministic recruitment
